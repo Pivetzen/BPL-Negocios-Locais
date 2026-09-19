@@ -507,7 +507,7 @@
         if (biz.Telefone) msg += `📞 Contato: ${phoneFormatted}\n`;
         if (biz.Endereco) msg += `📍 Endereço: ${biz.Endereco}\n`;
         
-        msg += `\nVeja mais no nosso Guia de Recomendados!`;
+        msg += `\nVeja mais no nosso Guia de Recomendados:\nhttps://tinyurl.com/BLP-Negocios-Locais`;
 
         return `https://api.whatsapp.com/send?text=${encodeURIComponent(msg)}`;
     }
