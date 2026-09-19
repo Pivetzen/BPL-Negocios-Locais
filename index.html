@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recomendados - PRB</title>
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-hover: #1d4ed8;
+            --bg: #f8fafc;
+            --card-bg: #ffffff;
+            --text: #1e293b;
+            --text-light: #64748b;
+            --success: #16a34a;
+            --tag-bg: #fef3c7;
+            --tag-text: #d97706;
+            --featured-bg: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+            --featured-border: #bfdbfe;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            padding: 20px 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        header {
+            width: 100%;
+            max-width: 1100px;
+            text-align: center;
+            margin-bottom: 24px;
+        }
+
+        header h1 {
+            font-size: 2rem;
+            color: var(--primary);
+            margin-bottom: 6px;
+        }
+
+        header p {
+            color: var(--text-light);
+            font-size: 0.95rem;
+        }
+
+        /* --- ESTILOS DO CARD DE DESTAQUE --- */
+        .featured-container {
+            width: 100%;
+            max-width: 1100px;
+            margin-bottom: 24px;
+            display: none;
+        }
+
+        .featured-card {
+            background: var(--featured-bg);
+            border: 2px solid var(--featured-border);
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 10px 15px -3px rgba(37, 99, 235, 0.08);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .featured-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: var(--primary);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 16px;
+        }
+
+        .featured-body {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        @media (min-width: 768px) {
+            .featured-body {
+                flex-direction: row;
+                align-items: center;
+            }
+        }
+
+        .featured-img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 12px;
+            background-color: #cbd5e1;
+        }
+
+        @media (min-width: 768px) {
+            .featured-img {
+                width: 280px;
+                height: 180px;
+                flex-shrink: 0;
+            }
+        }
+
+        .featured-details {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .search-container {
+            width: 100%;
+            max-width: 1100px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        @media (min-width: 640px) { 
+            .search-container { flex-direction: row; } 
+        }
+
+        .search-input, .filter-select {
+            width: 100%;
+            padding: 12px;
+            font-size: 0.95rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            background-color: var(--card-bg);
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .search-input:focus, .filter-select:focus { border-color: var(--primary); }
+
+        .business-list {
+            width: 100%;
+            max-width: 1100px;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+
+        @media (min-width: 640px) { 
+            .business-list { grid-template-columns: repeat(2, 1fr); } 
+        }
+
+        @media (min-width: 1024px) { 
+            .business-list { grid-template-columns: repeat(3, 1fr); } 
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            border: 1px solid #edf2f7;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.08);
+        }
+
+        .card-img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            background-color: #e2e8f0;
+        }
+
+        .card-content { padding: 20px; flex-grow: 1; }
+
+        .card-header-tags {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .card-category {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            font-weight: 700;
+            color: var(--primary);
+            letter-spacing: 0.5px;
+        }
+
+        .tag-building {
+            background-color: var(--tag-bg);
+            color: var(--tag-text);
+            font-size: 0.7rem;
+            font-weight: 700;
+            padding: 2px 8px;
+            border-radius: 4px;
+        }
+
+        .card-title { font-size: 1.2rem; font-weight: 700; margin-bottom: 8px; line-height: 1.3; }
+        .card-description { font-size: 0.9rem; color: var(--text-light); margin-bottom: 14px; line-height: 1.4; }
+        .card-info { font-size: 0.85rem; margin-bottom: 12px; border-top: 1px solid rgba(0,0,0,0.05); padding-top: 10px; }
+        .card-info p { margin-bottom: 6px; }
+
+        .card-actions { 
+            display: flex; 
+            flex-direction: column; 
+            gap: 10px; 
+            padding: 0 20px 20px 20px; 
+        }
+
+        .social-actions {
+            display: flex;
+            gap: 8px;
+            width: 100%;
+        }
+
+        .btn {
+            padding: 10px 12px;
+            border-radius: 8px;
+            border: none;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            text-align: center;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.2s, opacity 0.2s;
+        }
+
+        .social-actions .btn { flex: 1; }
+        
+        .btn-contact { background-color: #25d366; color: white; }
+        .btn-contact:hover { background-color: #22c55e; }
+        .btn-insta { background-color: #e1306c; color: white; }
+        .btn-insta:hover { background-color: #d62963; }
+        .btn-site { background-color: #4f46e5; color: white; }
+        .btn-site:hover { background-color: #4338ca; }
+        
+        .btn-recommend { 
+            width: 100%; 
+            background-color: #e2e8f0; 
+            color: var(--text); 
+        }
+        .btn-recommend:hover { background-color: #cbd5e1; }
+        .btn-recommend.active { background-color: var(--success); color: white; }
+        .btn-recommend.active:hover { background-color: #15803d; }
+
+        .status-message { 
+            text-align: center; 
+            padding: 40px; 
+            font-size: 1rem; 
+            color: var(--text-light); 
+            grid-column: 1 / -1; 
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Recomendados - Condomínio PRB</h1>
+        <p>Encontre e recomende os melhores serviços da região</p>
+    </header>
+
+    <!-- Container do Negócio em Destaque -->
+    <div id="featuredContainer" class="featured-container">
+        <div class="featured-card">
+            <div class="featured-badge">✨ Conheça este negócio</div>
+            <div id="featuredContent" class="featured-body"></div>
+        </div>
+    </div>
+
+    <!-- Filtros de Busca -->
+    <div class="search-container">
+        <input type="text" id="searchInput" class="search-input" placeholder="Buscar por nome do negócio...">
+        <select id="categoryFilter" class="filter-select">
+            <option value="todos">Todos os ramos/categorias</option>
+        </select>
+    </div>
+
+    <!-- Lista de Negócios -->
+    <main id="businessList" class="business-list">
+        <div class="status-message">Carregando catálogo de parceiros...</div>
+    </main>
+
+<script>
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxQymy9p164zRXSejyK0n1q7RIOV7qcdD9kL9C4xK7rhGQJZaF6HrBK-ydsczinL1SXcA/exec'; 
+    const SHEET_ID = '1xHCYeMoeJf0_TItdUivSCH_nTe-2wh5Z0FP9QX0Ok5U';
+    
+    const BIZ_SHEET_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?sheet=Negocios&tqx=out:json`;
+    const REC_SHEET_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?sheet=Recomendacoes&tqx=out:json`;
+
+    let businesses = [];
+    let globalRecommendations = {}; 
+    let randomFeaturedBusiness = null;
+
+    // Gerador de identificador anônimo para o visitante atual
+    function getVisitorId() {
+        let visitorId = localStorage.getItem('guestVisitorId');
+        if (!visitorId) {
+            visitorId = 'guest_' + Math.random().toString(36).substring(2, 9);
+            localStorage.setItem('guestVisitorId', visitorId);
+        }
+        return visitorId;
+    }
+
+    const currentUserId = getVisitorId();
+
+    async function init() {
+        await fetchRecommendations();
+        await fetchBusinesses();
+    }
+
+    function formatPhone(phone) {
+        if (!phone) return 'Não informado';
+        let digits = String(phone).replace(/\D/g, '');
+        if (digits.length === 11) return `(${digits.slice(0, 2)}) ${digits.slice(2, 7)}-${digits.slice(7)}`;
+        if (digits.length === 10) return `(${digits.slice(0, 2)}) ${digits.slice(2, 6)}-${digits.slice(6)}`;
+        return phone;
+    }
+
+    function formatInstagramUrl(insta) {
+        if (!insta) return '';
+        let clean = String(insta).trim();
+        if (clean.startsWith('http://') || clean.startsWith('https://')) return clean;
+        if (clean.startsWith('@')) clean = clean.substring(1);
+        return `https://instagram.com/${clean}`;
+    }
+
+    function formatWebsiteUrl(site) {
+        if (!site) return '';
+        let clean = String(site).trim();
+        if (clean.startsWith('http://') || clean.startsWith('https://')) return clean;
+        return `https://${clean}`;
+    }
+
+    async function fetchRecommendations() {
+        try {
+            const response = await fetch(REC_SHEET_URL);
+            const text = await response.text();
+            const jsonString = text.substring(text.indexOf("{"), text.lastIndexOf("}") + 1);
+            const json = JSON.parse(jsonString);
+            const rows = json.table.rows;
+            
+            globalRecommendations = {};
+            rows.forEach(row => {
+                const uId = row.c[0] ? String(row.c[0].v).trim() : '';
+                const negId = row.c[1] ? String(row.c[1].v).trim() : '';
+                if(negId && uId) {
+                    globalRecommendations[negId] = globalRecommendations[negId] || [];
+                    if(!globalRecommendations[negId].includes(uId)) {
+                        globalRecommendations[negId].push(uId);
+                    }
+                }
+            });
+            renderBusinesses();
+        } catch(e) { console.error("Erro ao carregar recomendações:", e); }
+    }
+
+    function parseSheetDate(rawDate) {
+        if (!rawDate) return null;
+        if (typeof rawDate === 'string' && rawDate.startsWith('Date(')) {
+            const parts = rawDate.match(/\d+/g);
+            if (parts && parts.length >= 3) return new Date(parts[0], parts[1], parts[2], 23, 59, 59);
+        }
+        if (typeof rawDate === 'string') {
+            if (rawDate.includes('-')) {
+                const [y, m, d] = rawDate.split('-');
+                return new Date(y, m - 1, d, 23, 59, 59);
+            }
+            if (rawDate.includes('/')) {
+                const [d, m, y] = rawDate.split('/');
+                return new Date(y, m - 1, d, 23, 59, 59);
+            }
+        }
+        const d = new Date(rawDate);
+        if (!isNaN(d.getTime())) {
+            d.setHours(23, 59, 59);
+            return d;
+        }
+        return null;
+    }
+
+    async function fetchBusinesses() {
+        try {
+            const response = await fetch(BIZ_SHEET_URL);
+            const text = await response.text();
+            const jsonString = text.substring(text.indexOf("{"), text.lastIndexOf("}") + 1);
+            const json = JSON.parse(jsonString);
+            const rows = json.table.rows;
+            
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+
+            businesses = rows.map((row) => {
+                if(row.c[0] && row.c[0].v === "NEG_ID") return null;
+                
+                const rawVencimento = row.c[10] ? (row.c[10].v || row.c[10].f) : null;
+                const vencimentoDate = parseSheetDate(rawVencimento);
+                const isActive = vencimentoDate && vencimentoDate >= today;
+
+                return {
+                    id: row.c[0] ? String(row.c[0].v).trim() : '',
+                    Nome: row.c[1] ? row.c[1].v : '',
+                    Categoria: row.c[2] ? row.c[2].v : '',
+                    Telefone: row.c[3] ? row.c[3].v : '',
+                    Instagram: row.c[4] ? row.c[4].v : '',
+                    Site: row.c[5] ? row.c[5].v : '',
+                    Endereco: row.c[6] ? row.c[6].v : '',
+                    Descricao: row.c[7] ? row.c[7].v : '',
+                    Imagem: row.c[8] ? row.c[8].v : '',
+                    Local: row.c[9] ? row.c[9].v : '',
+                    IsActive: isActive
+                };
+            }).filter(b => b && b.IsActive);
+
+            if (businesses.length > 0 && !randomFeaturedBusiness) {
+                const randomIndex = Math.floor(Math.random() * businesses.length);
+                randomFeaturedBusiness = businesses[randomIndex];
+            }
+
+            populateFilters();
+            renderBusinesses();
+        } catch (error) { console.error("Erro na carga de negócios:", error); }
+    }
+
+    function populateFilters() {
+        const select = document.getElementById('categoryFilter');
+        if(!select) return;
+        select.innerHTML = '<option value="todos">Todos os ramos/categorias</option>';
+        
+        const categories = [...new Set(businesses.map(b => b.Categoria))].filter(Boolean);
+        categories.sort().forEach(cat => {
+            const opt = document.createElement('option');
+            opt.value = cat; 
+            opt.innerText = cat; 
+            select.appendChild(opt);
+        });
+        select.addEventListener('change', () => renderBusinesses());
+        document.getElementById('searchInput').addEventListener('input', () => renderBusinesses());
+    }
+
+    window.toggleRecommend = async function(negId) {
+        globalRecommendations[negId] = globalRecommendations[negId] || [];
+        if(globalRecommendations[negId].includes(currentUserId)) {
+            globalRecommendations[negId] = globalRecommendations[negId].filter(id => id !== currentUserId);
+        } else {
+            globalRecommendations[negId].push(currentUserId);
+        }
+        renderBusinesses();
+
+        const formData = new URLSearchParams();
+        formData.append('action', 'toggleRecommend');
+        formData.append('negId', negId);
+        formData.append('userId', currentUserId);
+
+        try {
+            await fetch(SCRIPT_URL, { method: 'POST', mode: 'no-cors', body: formData });
+            setTimeout(fetchRecommendations, 1000);
+        } catch(e) { console.error(e); }
+    };
+
+    function renderFeaturedCard() {
+        const container = document.getElementById('featuredContainer');
+        const content = document.getElementById('featuredContent');
+        
+        if (!randomFeaturedBusiness || !container || !content) {
+            if (container) container.style.display = 'none';
+            return;
+        }
+
+        const biz = randomFeaturedBusiness;
+        const recs = globalRecommendations[biz.id] || [];
+        const totalRecommendations = recs.length;
+        const isRecommendedByMe = recs.includes(currentUserId);
+
+        const cleanPhone = biz.Telefone ? String(biz.Telefone).replace(/\D/g, '') : '';
+        const whatsappUrl = `https://wa.me/${cleanPhone}`;
+        const instagramUrl = formatInstagramUrl(biz.Instagram);
+        const websiteUrl = formatWebsiteUrl(biz.Site);
+
+        const imgTag = biz.Imagem 
+            ? `<img class="featured-img" src="${biz.Imagem}" alt="${biz.Nome}">` 
+            : `<div class="featured-img" style="display:flex;align-items:center;justify-content:center;color:#94a3b8;font-size:0.85rem;background:#e2e8f0;">Sem foto cadastrada</div>`;
+
+        const buildingTag = biz.Local && biz.Local.toUpperCase() === "DO PRÉDIO" 
+            ? `<span class="tag-building">DO PRÉDIO</span>` 
+            : '';
+
+        const btnWhatsapp = cleanPhone ? `<a href="${whatsappUrl}" target="_blank" rel="noopener" class="btn btn-contact">WhatsApp</a>` : '';
+        const btnInstagram = instagramUrl ? `<a href="${instagramUrl}" target="_blank" rel="noopener" class="btn btn-insta">Instagram</a>` : '';
+        const btnSite = websiteUrl ? `<a href="${websiteUrl}" target="_blank" rel="noopener" class="btn btn-site">Site</a>` : '';
+
+        const btnRecomendo = `
+            <button onclick="toggleRecommend('${biz.id}')" class="btn btn-recommend ${isRecommendedByMe ? 'active' : ''}">
+                👍 Recomendo (${totalRecommendations})
+            </button>
+        `;
+
+        const socialRow = (btnWhatsapp || btnInstagram || btnSite) 
+            ? `<div class="social-actions">${btnWhatsapp}${btnInstagram}${btnSite}</div>` 
+            : '';
+
+        content.innerHTML = `
+            ${imgTag}
+            <div class="featured-details">
+                <div>
+                    <div class="card-header-tags">
+                        <div class="card-category">${biz.Categoria || 'Geral'}</div>
+                        ${buildingTag}
+                    </div>
+                    <div class="card-title">${biz.Nome || 'Sem Nome'}</div>
+                    <div class="card-description">${biz.Descricao || 'Sem descrição.'}</div>
+                    <div class="card-info">
+                        <p><strong>📍 Endereço:</strong> ${biz.Endereco || 'Não informado'}</p>
+                        <p><strong>📞 Contato:</strong> ${formatPhone(biz.Telefone)}</p>
+                    </div>
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 10px; margin-top: 12px;">
+                    ${socialRow}
+                    ${btnRecomendo}
+                </div>
+            </div>
+        `;
+
+        container.style.display = 'block';
+    }
+
+    function renderBusinesses() {
+        renderFeaturedCard();
+
+        const container = document.getElementById('businessList');
+        if(!container) return;
+        container.innerHTML = '';
+
+        const selectedCategory = document.getElementById('categoryFilter').value;
+        const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+
+        let filtered = businesses.filter(b => {
+            const matchesCategory = selectedCategory === 'todos' || b.Categoria === selectedCategory;
+            const matchesSearch = b.Nome.toLowerCase().includes(searchTerm);
+            return matchesCategory && matchesSearch;
+        });
+
+        filtered.sort((a, b) => {
+            const countA = (globalRecommendations[a.id] || []).length;
+            const countB = (globalRecommendations[b.id] || []).length;
+            if (countB !== countA) return countB - countA;
+            return a.Nome.localeCompare(b.Nome);
+        });
+
+        if (filtered.length === 0) {
+            container.innerHTML = '<div class="status-message">Nenhum negócio ativo encontrado.</div>';
+            return;
+        }
+
+        filtered.forEach(biz => {
+            const recs = globalRecommendations[biz.id] || [];
+            const totalRecommendations = recs.length;
+            const isRecommendedByMe = recs.includes(currentUserId);
+            
+            const cleanPhone = biz.Telefone ? String(biz.Telefone).replace(/\D/g, '') : '';
+            const whatsappUrl = `https://wa.me/${cleanPhone}`;
+            const instagramUrl = formatInstagramUrl(biz.Instagram);
+            const websiteUrl = formatWebsiteUrl(biz.Site);
+            
+            const imgTag = biz.Imagem 
+                ? `<img class="card-img" src="${biz.Imagem}" alt="${biz.Nome}" loading="lazy">` 
+                : `<div class="card-img" style="display:flex;align-items:center;justify-content:center;color:#94a3b8;font-size:0.85rem;background:#e2e8f0;">Sem foto cadastrada</div>`;
+            
+            const buildingTag = biz.Local && biz.Local.toUpperCase() === "DO PRÉDIO" 
+                ? `<span class="tag-building">DO PRÉDIO</span>` 
+                : '';
+
+            const btnWhatsapp = cleanPhone ? `<a href="${whatsappUrl}" target="_blank" rel="noopener" class="btn btn-contact">WhatsApp</a>` : '';
+            const btnInstagram = instagramUrl ? `<a href="${instagramUrl}" target="_blank" rel="noopener" class="btn btn-insta">Instagram</a>` : '';
+            const btnSite = websiteUrl ? `<a href="${websiteUrl}" target="_blank" rel="noopener" class="btn btn-site">Site</a>` : '';
+            
+            const btnRecomendo = `
+                <button onclick="toggleRecommend('${biz.id}')" class="btn btn-recommend ${isRecommendedByMe ? 'active' : ''}">
+                    👍 Recomendo (${totalRecommendations})
+                </button>
+            `;
+
+            const socialRow = (btnWhatsapp || btnInstagram || btnSite) 
+                ? `<div class="social-actions">${btnWhatsapp}${btnInstagram}${btnSite}</div>` 
+                : '';
+
+            const card = document.createElement('div');
+            card.className = 'card';
+            card.innerHTML = `
+                ${imgTag}
+                <div class="card-content">
+                    <div class="card-header-tags">
+                        <div class="card-category">${biz.Categoria || 'Geral'}</div>
+                        ${buildingTag}
+                    </div>
+                    <div class="card-title">${biz.Nome || 'Sem Nome'}</div>
+                    <div class="card-description">${biz.Descricao || 'Sem descrição.'}</div>
+                    <div class="card-info">
+                        <p><strong>📍 Endereço:</strong> ${biz.Endereco || 'Não informado'}</p>
+                        <p><strong>📞 Contato:</strong> ${formatPhone(biz.Telefone)}</p>
+                    </div>
+                </div>
+                <div class="card-actions">
+                    ${socialRow}
+                    ${btnRecomendo}
+                </div>
+            `;
+            container.appendChild(card);
+        });
+    }
+
+    window.onload = init;
+</script>
+</body>
+</html>
