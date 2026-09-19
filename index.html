@@ -31,7 +31,7 @@
         body {
             background-color: var(--bg);
             color: var(--text);
-            padding: 20px 12px 160px 12px; /* Margem inferior para não cobrir pelo rodapé fixo */
+            padding: 16px 8px 160px 8px; /* Margem inferior para o rodapé fixo */
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -42,34 +42,34 @@
             width: 100%;
             max-width: 1100px;
             text-align: center;
-            margin-bottom: 24px;
+            margin-bottom: 16px;
         }
 
         header h1 {
-            font-size: 2rem;
+            font-size: 1.5rem;
             color: var(--primary);
-            margin-bottom: 6px;
+            margin-bottom: 4px;
         }
 
         header p {
             color: var(--text-light);
-            font-size: 0.95rem;
+            font-size: 0.85rem;
         }
 
-        /* --- ESTILOS DO CARD DE DESTAQUE --- */
+        /* --- CARD DE DESTAQUE (SUPERIOR - MANTIDO ÚNICO) --- */
         .featured-container {
             width: 100%;
             max-width: 1100px;
-            margin-bottom: 24px;
+            margin-bottom: 20px;
             display: none;
         }
 
         .featured-card {
             background: var(--featured-bg);
             border: 2px solid var(--featured-border);
-            border-radius: 16px;
-            padding: 20px;
-            box-shadow: 0 10px 15px -3px rgba(37, 99, 235, 0.08);
+            border-radius: 12px;
+            padding: 14px;
+            box-shadow: 0 6px 12px -2px rgba(37, 99, 235, 0.08);
             position: relative;
             overflow: hidden;
         }
@@ -80,19 +80,19 @@
             gap: 6px;
             background: var(--primary);
             color: white;
-            padding: 4px 12px;
+            padding: 3px 10px;
             border-radius: 20px;
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 0.5px;
-            margin-bottom: 16px;
+            margin-bottom: 12px;
         }
 
         .featured-body {
             display: flex;
             flex-direction: column;
-            gap: 20px;
+            gap: 12px;
         }
 
         @media (min-width: 768px) {
@@ -104,16 +104,16 @@
 
         .featured-img {
             width: 100%;
-            height: 200px;
+            height: 160px;
             object-fit: cover;
-            border-radius: 12px;
+            border-radius: 8px;
             background-color: #cbd5e1;
         }
 
         @media (min-width: 768px) {
             .featured-img {
-                width: 280px;
-                height: 180px;
+                width: 260px;
+                height: 170px;
                 flex-shrink: 0;
             }
         }
@@ -125,13 +125,14 @@
             justify-content: space-between;
         }
 
+        /* --- FILTROS DE BUSCA --- */
         .search-container {
             width: 100%;
             max-width: 1100px;
             display: flex;
             flex-direction: column;
-            gap: 12px;
-            margin-bottom: 24px;
+            gap: 8px;
+            margin-bottom: 16px;
         }
 
         @media (min-width: 640px) { 
@@ -140,9 +141,9 @@
 
         .search-input, .filter-select {
             width: 100%;
-            padding: 12px;
-            font-size: 0.95rem;
-            border: 2px solid #e2e8f0;
+            padding: 10px;
+            font-size: 0.85rem;
+            border: 1px solid #cbd5e1;
             border-radius: 8px;
             background-color: var(--card-bg);
             outline: none;
@@ -151,95 +152,131 @@
 
         .search-input:focus, .filter-select:focus { border-color: var(--primary); }
 
+        /* --- GRID DOS CARDS DO CATÁLOGO --- */
         .business-list {
             width: 100%;
             max-width: 1100px;
             display: grid;
-            grid-template-columns: 1fr;
-            gap: 20px;
+            grid-template-columns: repeat(2, 1fr); /* 2 por linha no celular por padrão */
+            gap: 10px;
+        }
+
+        /* Ajuste opcional para celulares um pouco maiores exibirem 3 se desejar, 
+           mas 2 garante ótima visualização em quase todas as telas */
+        @media (max-width: 360px) {
+            .business-list { grid-template-columns: repeat(2, 1fr); gap: 6px; }
         }
 
         @media (min-width: 640px) { 
-            .business-list { grid-template-columns: repeat(2, 1fr); } 
+            .business-list { grid-template-columns: repeat(3, 1fr); gap: 16px; } 
         }
 
         @media (min-width: 1024px) { 
-            .business-list { grid-template-columns: repeat(3, 1fr); } 
+            .business-list { grid-template-columns: repeat(4, 1fr); gap: 20px; } 
         }
 
+        /* --- CARD INDIVIDUAL COMPACTO --- */
         .card {
             background: var(--card-bg);
-            border-radius: 12px;
+            border-radius: 10px;
             overflow: hidden;
-            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.04);
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            border: 1px solid #edf2f7;
+            border: 1px solid #e2e8f0;
             transition: transform 0.2s, box-shadow 0.2s;
         }
 
         .card:hover {
             transform: translateY(-2px);
-            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.08);
+            box-shadow: 0 6px 12px -2px rgba(0,0,0,0.08);
         }
 
         .card-img {
             width: 100%;
-            height: 180px;
+            height: 110px; /* Altura reduzida para mobile */
             object-fit: cover;
             background-color: #e2e8f0;
         }
 
-        .card-content { padding: 20px; flex-grow: 1; }
+        @media (min-width: 640px) {
+            .card-img { height: 150px; }
+        }
+
+        .card-content { padding: 10px; flex-grow: 1; }
 
         .card-header-tags {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 8px;
+            margin-bottom: 4px;
+            flex-wrap: wrap;
+            gap: 2px;
         }
 
         .card-category {
-            font-size: 0.75rem;
+            font-size: 0.65rem;
             text-transform: uppercase;
             font-weight: 700;
             color: var(--primary);
-            letter-spacing: 0.5px;
+            letter-spacing: 0.3px;
         }
 
         .tag-building {
             background-color: var(--tag-bg);
             color: var(--tag-text);
-            font-size: 0.7rem;
+            font-size: 0.6rem;
             font-weight: 700;
-            padding: 2px 8px;
+            padding: 1px 5px;
             border-radius: 4px;
         }
 
-        .card-title { font-size: 1.2rem; font-weight: 700; margin-bottom: 8px; line-height: 1.3; }
-        .card-description { font-size: 0.9rem; color: var(--text-light); margin-bottom: 14px; line-height: 1.4; }
-        .card-info { font-size: 0.85rem; margin-bottom: 12px; border-top: 1px solid rgba(0,0,0,0.05); padding-top: 10px; }
-        .card-info p { margin-bottom: 6px; }
+        .card-title { 
+            font-size: 0.95rem; 
+            font-weight: 700; 
+            margin-bottom: 4px; 
+            line-height: 1.2;
+            word-break: break-word;
+        }
+        
+        .card-description { 
+            font-size: 0.75rem; 
+            color: var(--text-light); 
+            margin-bottom: 8px; 
+            line-height: 1.3;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        
+        .card-info { 
+            font-size: 0.72rem; 
+            margin-bottom: 6px; 
+            border-top: 1px solid rgba(0,0,0,0.05); 
+            padding-top: 6px; 
+        }
+        .card-info p { margin-bottom: 3px; word-break: break-word; }
 
         .card-actions { 
             display: flex; 
             flex-direction: column; 
-            gap: 10px; 
-            padding: 0 20px 20px 20px; 
+            gap: 6px; 
+            padding: 0 10px 10px 10px; 
         }
 
         .social-actions {
             display: flex;
-            gap: 8px;
+            gap: 4px;
             width: 100%;
         }
 
         .btn {
-            padding: 10px 12px;
-            border-radius: 8px;
+            padding: 6px 8px;
+            border-radius: 6px;
             border: none;
-            font-size: 0.85rem;
+            font-size: 0.75rem;
             font-weight: 600;
             cursor: pointer;
             text-align: center;
@@ -250,7 +287,7 @@
             transition: background-color 0.2s, opacity 0.2s;
         }
 
-        .social-actions .btn { flex: 1; }
+        .social-actions .btn { flex: 1; padding: 6px 4px; font-size: 0.7rem; }
         
         .btn-contact { background-color: #25d366; color: white; }
         .btn-contact:hover { background-color: #22c55e; }
@@ -263,18 +300,19 @@
             width: 100%; 
             background-color: var(--success); 
             color: white; 
+            font-size: 0.72rem;
         }
         .btn-share:hover { background-color: #15803d; }
 
         .status-message { 
             text-align: center; 
-            padding: 40px; 
-            font-size: 1rem; 
+            padding: 30px; 
+            font-size: 0.9rem; 
             color: var(--text-light); 
             grid-column: 1 / -1; 
         }
 
-        /* --- ESTILOS DA SEÇÃO FIXA DE DOAÇÃO VIA PIX (RODAPÉ) --- */
+        /* --- SEÇÃO FIXA DE DOAÇÃO VIA PIX (RODAPÉ) --- */
         .donation-footer {
             position: fixed;
             bottom: 0;
@@ -282,20 +320,20 @@
             width: 100%;
             background-color: #f1f5f9;
             border-top: 1px solid #cbd5e1;
-            padding: 12px 16px;
+            padding: 10px 12px;
             text-align: center;
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             color: #475569;
             z-index: 50;
             box-shadow: 0 -4px 6px -1px rgba(0, 0, 0, 0.08);
         }
 
         .donation-card {
-            max-width: 480px;
-            margin: 0 auto 6px auto;
-            padding: 10px 14px;
+            max-width: 440px;
+            margin: 0 auto 4px auto;
+            padding: 8px 12px;
             background: #ffffff;
-            border-radius: 12px;
+            border-radius: 10px;
             box-shadow: 0 1px 3px rgba(0,0,0,0.05);
             border: 1px solid #cbd5e1;
         }
@@ -308,26 +346,27 @@
             align-items: center;
             justify-content: center;
             gap: 6px;
+            font-size: 0.8rem;
         }
 
         .donation-subtitle {
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             color: #64748b;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
         }
 
         .donation-controls {
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 6px;
         }
 
         .donation-input {
             width: 100%;
             border: 1px solid #cbd5e1;
-            border-radius: 8px;
-            padding: 6px 12px;
-            font-size: 0.9rem;
+            border-radius: 6px;
+            padding: 5px 8px;
+            font-size: 0.85rem;
             font-weight: 600;
             color: #1e293b;
             text-align: center;
@@ -343,25 +382,25 @@
             background-color: #059669;
             color: white;
             font-weight: 600;
-            padding: 7px 16px;
-            border-radius: 8px;
+            padding: 6px 12px;
+            border-radius: 6px;
             border: none;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             cursor: pointer;
             transition: background-color 0.2s;
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 4px;
             white-space: nowrap;
         }
 
         .btn-pix:hover { background-color: #047857; }
 
         .pix-success-msg {
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             color: #059669;
             font-weight: 600;
-            margin-top: 6px;
+            margin-top: 4px;
             display: none;
         }
     </style>
@@ -369,11 +408,11 @@
 <body>
 
     <header>
-        <h1>Recomendados - Condomínio PRB</h1>
+        <h1>Recomendados - PRB</h1>
         <p>Encontre e recomende os melhores serviços da região</p>
     </header>
 
-    <!-- Container do Negócio em Destaque -->
+    <!-- Container do Negócio em Destaque (Fica único no topo) -->
     <div id="featuredContainer" class="featured-container">
         <div class="featured-card">
             <div class="featured-badge">✨ Conheça este negócio</div>
@@ -389,7 +428,7 @@
         </select>
     </div>
 
-    <!-- Lista de Negócios -->
+    <!-- Lista de Negócios (2 cards por linha no mobile) -->
     <main id="businessList" class="business-list">
         <div class="status-message">Carregando catálogo de parceiros...</div>
     </main>
@@ -398,9 +437,9 @@
     <footer class="donation-footer">
         <div class="donation-card">
             <p class="donation-title">
-                <i class="fa-solid fa-heart text-red-500" style="color: #ef4444;"></i> Gostou do app? Apoie o projeto!
+                <i class="fa-solid fa-heart" style="color: #ef4444;"></i> Gostou do app? Apoie o projeto!
             </p>
-            <p class="donation-subtitle">Sua doação ajuda a manter a ferramenta online e atualizada.</p>
+            <p class="donation-subtitle">Sua doação ajuda a manter a ferramenta online.</p>
             
             <div class="donation-controls">
                 <input type="text" id="inputValorDoacao" value="R$ 5,00" oninput="mascaraMoeda(this)" class="donation-input">
@@ -409,10 +448,10 @@
                 </button>
             </div>
             <p id="msgSucessoPix" class="pix-success-msg">
-                <i class="fa-solid fa-check-circle"></i> Código Pix Copia e Cola copiado! Abra seu banco para pagar.
+                <i class="fa-solid fa-check-circle"></i> Código Copia e Cola gravado! Abra seu banco para pagar.
             </p>
         </div>
-        <p style="font-size: 0.7rem; color: #94a3b8;">Guia de Recomendados PRB © 2026 - Todos os direitos reservados</p>
+        <p style="font-size: 0.65rem; color: #94a3b8;">Guia de Recomendados PRB © 2026</p>
     </footer>
 
 <script>
@@ -454,7 +493,6 @@
         return `https://${clean}`;
     }
 
-    // Função para gerar o link do WhatsApp com a mensagem personalizada
     function getShareWhatsappUrl(biz) {
         const phoneFormatted = formatPhone(biz.Telefone);
         
@@ -571,17 +609,17 @@
 
         const imgTag = biz.Imagem 
             ? `<img class="featured-img" src="${biz.Imagem}" alt="${biz.Nome}">` 
-            : `<div class="featured-img" style="display:flex;align-items:center;justify-content:center;color:#94a3b8;font-size:0.85rem;background:#e2e8f0;">Sem foto cadastrada</div>`;
+            : `<div class="featured-img" style="display:flex;align-items:center;justify-content:center;color:#94a3b8;font-size:0.75rem;background:#e2e8f0;">Sem foto</div>`;
 
         const buildingTag = biz.Local && biz.Local.toUpperCase() === "DO PRÉDIO" 
             ? `<span class="tag-building">DO PRÉDIO</span>` 
             : '';
 
-        const btnWhatsapp = cleanPhone ? `<a href="${whatsappUrl}" target="_blank" rel="noopener" class="btn btn-contact">WhatsApp</a>` : '';
-        const btnInstagram = instagramUrl ? `<a href="${instagramUrl}" target="_blank" rel="noopener" class="btn btn-insta">Instagram</a>` : '';
+        const btnWhatsapp = cleanPhone ? `<a href="${whatsappUrl}" target="_blank" rel="noopener" class="btn btn-contact">Whats</a>` : '';
+        const btnInstagram = instagramUrl ? `<a href="${instagramUrl}" target="_blank" rel="noopener" class="btn btn-insta">Insta</a>` : '';
         const btnSite = websiteUrl ? `<a href="${websiteUrl}" target="_blank" rel="noopener" class="btn btn-site">Site</a>` : '';
 
-        const btnIndicar = `<a href="${shareUrl}" target="_blank" rel="noopener" class="btn btn-share">📲 Indicar para um amigo</a>`;
+        const btnIndicar = `<a href="${shareUrl}" target="_blank" rel="noopener" class="btn btn-share">📲 Indicar Amigo</a>`;
 
         const socialRow = (btnWhatsapp || btnInstagram || btnSite) 
             ? `<div class="social-actions">${btnWhatsapp}${btnInstagram}${btnSite}</div>` 
@@ -602,7 +640,7 @@
                         <p><strong>📞 Contato:</strong> ${formatPhone(biz.Telefone)}</p>
                     </div>
                 </div>
-                <div style="display: flex; flex-direction: column; gap: 10px; margin-top: 12px;">
+                <div style="display: flex; flex-direction: column; gap: 6px; margin-top: 8px;">
                     ${socialRow}
                     ${btnIndicar}
                 </div>
@@ -644,17 +682,17 @@
             
             const imgTag = biz.Imagem 
                 ? `<img class="card-img" src="${biz.Imagem}" alt="${biz.Nome}" loading="lazy">` 
-                : `<div class="card-img" style="display:flex;align-items:center;justify-content:center;color:#94a3b8;font-size:0.85rem;background:#e2e8f0;">Sem foto cadastrada</div>`;
+                : `<div class="card-img" style="display:flex;align-items:center;justify-content:center;color:#94a3b8;font-size:0.75rem;background:#e2e8f0;">Sem foto</div>`;
             
             const buildingTag = biz.Local && biz.Local.toUpperCase() === "DO PRÉDIO" 
                 ? `<span class="tag-building">DO PRÉDIO</span>` 
                 : '';
 
-            const btnWhatsapp = cleanPhone ? `<a href="${whatsappUrl}" target="_blank" rel="noopener" class="btn btn-contact">WhatsApp</a>` : '';
-            const btnInstagram = instagramUrl ? `<a href="${instagramUrl}" target="_blank" rel="noopener" class="btn btn-insta">Instagram</a>` : '';
+            const btnWhatsapp = cleanPhone ? `<a href="${whatsappUrl}" target="_blank" rel="noopener" class="btn btn-contact">Whats</a>` : '';
+            const btnInstagram = instagramUrl ? `<a href="${instagramUrl}" target="_blank" rel="noopener" class="btn btn-insta">Insta</a>` : '';
             const btnSite = websiteUrl ? `<a href="${websiteUrl}" target="_blank" rel="noopener" class="btn btn-site">Site</a>` : '';
             
-            const btnIndicar = `<a href="${shareUrl}" target="_blank" rel="noopener" class="btn btn-share">📲 Indicar para um amigo</a>`;
+            const btnIndicar = `<a href="${shareUrl}" target="_blank" rel="noopener" class="btn btn-share">📲 Indicar</a>`;
 
             const socialRow = (btnWhatsapp || btnInstagram || btnSite) 
                 ? `<div class="social-actions">${btnWhatsapp}${btnInstagram}${btnSite}</div>` 
@@ -672,8 +710,8 @@
                     <div class="card-title">${biz.Nome || 'Sem Nome'}</div>
                     <div class="card-description">${biz.Descricao || 'Sem descrição.'}</div>
                     <div class="card-info">
-                        <p><strong>📍 Endereço:</strong> ${biz.Endereco || 'Não informado'}</p>
-                        <p><strong>📞 Contato:</strong> ${formatPhone(biz.Telefone)}</p>
+                        <p><strong>📍</strong> ${biz.Endereco || 'Não informado'}</p>
+                        <p><strong>📞</strong> ${formatPhone(biz.Telefone)}</p>
                     </div>
                 </div>
                 <div class="card-actions">
@@ -685,7 +723,7 @@
         });
     }
 
-    // --- FUNÇÕES DE LÓGICA DO PIX DE DOAÇÃO ---
+    // --- LÓGICA DO PIX DE DOAÇÃO ---
     function mascaraMoeda(input) {
         let value = input.value.replace(/\D/g, "");
         if (!value || value === "00") {
@@ -708,7 +746,7 @@
         const merchantAccount = formatField('26', `${gui}${key}`);
         
         const categoryCode = formatField('52', '0000');
-        const currency = formatField('53', '986'); // BRL
+        const currency = formatField('53', '986');
         const amountStr = parseFloat(valor).toFixed(2);
         const amount = formatField('54', amountStr);
         const country = formatField('58', 'BR');
