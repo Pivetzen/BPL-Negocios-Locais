@@ -28,25 +28,29 @@
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
         }
 
-        /* Bloqueia o scroll e o zoom na página principal */
+        /* Trava a tela para impedir que o zoom nativo desloque a página */
         html, body {
             width: 100%;
             height: 100%;
             overflow: hidden;
+            position: fixed;
             background-color: var(--bg);
             color: var(--text);
             touch-action: pan-x pan-y;
         }
 
-        /* Estrutura principal em App Layout (Header + Conteúdo Scrollável + Rodapé) */
+        /* Estrutura principal da aplicação */
         .app-layout {
             display: flex;
             flex-direction: column;
             height: 100vh;
             width: 100vw;
+            position: absolute;
+            top: 0;
+            left: 0;
         }
 
-        /* Área central que ganha barra de rolagem isolada */
+        /* Conteúdo do catálogo (esta área rola de forma independente) */
         .main-content {
             flex: 1;
             overflow-y: auto;
@@ -75,7 +79,7 @@
             font-size: 0.85rem;
         }
 
-        /* --- CARD DE DESTAQUE (SUPERIOR) --- */
+        /* --- CARD DE DESTAQUE --- */
         .featured-container {
             width: 100%;
             max-width: 1100px;
@@ -334,7 +338,7 @@
             grid-column: 1 / -1; 
         }
 
-        /* --- RODAPÉ TOTALMENTE INDEPENDENTE --- */
+        /* --- RODAPÉ TOTALMENTE FIXO E INDEPENDENTE --- */
         .donation-footer {
             flex-shrink: 0;
             width: 100%;
@@ -345,7 +349,7 @@
             font-size: 0.75rem;
             color: #475569;
             box-shadow: 0 -4px 6px -1px rgba(0, 0, 0, 0.08);
-            z-index: 100;
+            z-index: 9999;
         }
 
         .donation-card {
@@ -428,8 +432,8 @@
 <body>
 
     <div class="app-layout">
-        <!-- ÁREA COM SCROLL DA PÁGINA -->
-        <div class="main-content">
+        <!-- ÁREA COM ROLAGEM INDEPENDENTE -->
+        <div class="main-content" id="mainContent">
             <header>
                 <h1>BPL - Negócios Locais</h1>
                 <p>Encontre e recomende os melhores serviços da região</p>
@@ -457,7 +461,7 @@
             </main>
         </div>
 
-        <!-- RODAPÉ FIXO E INDEPENDENTE DO SCROLL/ZOOM -->
+        <!-- RODAPÉ TOTALMENTE FIXO -->
         <footer class="donation-footer">
             <div class="donation-card">
                 <p class="donation-title">
@@ -480,6 +484,17 @@
     </div>
 
 <script>
+    // --- BLOQUEIO RIGOROSO DE ZOOM DE PINÇA VIA JS ---
+    document.addEventListener('touchmove', function (event) {
+        if (event.scale !== undefined && event.scale !== 1) {
+            event.preventDefault();
+        }
+    }, { passive: false });
+
+    document.addEventListener('gesturestart', function (event) {
+        event.preventDefault();
+    });
+
     const SHEET_ID = '1xHCYeMoeJf0_TItdUivSCH_nTe-2wh5Z0FP9QX0Ok5U';
     const BIZ_SHEET_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?sheet=Negocios&tqx=out:json`;
 
