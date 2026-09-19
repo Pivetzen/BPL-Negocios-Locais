@@ -44,7 +44,7 @@
             display: flex;
             flex-direction: column;
             height: 100vh;
-            height: 100dvh; /* Altura dinâmica que respeita a barra de navegação/URL */
+            height: 100dvh; /* Altura dinâmica para ignorar a barra do navegador */
             width: 100vw;
             position: absolute;
             top: 0;
@@ -339,7 +339,7 @@
             grid-column: 1 / -1; 
         }
 
-        /* --- RODAPÉ TOTALMENTE FIXO E ACIMA DA BARRA DE NAVEGAÇÃO --- */
+        /* --- RODAPÉ FIXO --- */
         .donation-footer {
             flex-shrink: 0;
             width: 100%;
@@ -449,9 +449,9 @@
                 </div>
             </div>
 
-            <!-- Filtros de Busca -->
+            <!-- Filtros de Busca (Placeholder atualizado para refletir a busca ampliada) -->
             <div class="search-container">
-                <input type="text" id="searchInput" class="search-input" placeholder="Buscar por nome do negócio...">
+                <input type="text" id="searchInput" class="search-input" placeholder="Buscar por nome ou palavras-chave na descrição...">
                 <select id="categoryFilter" class="filter-select">
                     <option value="todos">Todos os ramos/categorias</option>
                 </select>
@@ -486,7 +486,7 @@
     </div>
 
 <script>
-    // --- BLOQUEIO RIGOROSO DE ZOOM DE PINÇA VIA JS ---
+    // --- BLOQUEIO DE ZOOM DE PINÇA VIA JS ---
     document.addEventListener('touchmove', function (event) {
         if (event.scale !== undefined && event.scale !== 1) {
             event.preventDefault();
@@ -700,18 +700,23 @@
         container.innerHTML = '';
 
         const selectedCategory = document.getElementById('categoryFilter').value;
-        const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+        const searchTerm = document.getElementById('searchInput').value.toLowerCase().trim();
 
         let filtered = businesses.filter(b => {
             const matchesCategory = selectedCategory === 'todos' || b.Categoria === selectedCategory;
-            const matchesSearch = b.Nome.toLowerCase().includes(searchTerm);
+            
+            // Busca por palavras-chave tanto no Nome quanto na Descrição
+            const nameMatch = b.Nome ? b.Nome.toLowerCase().includes(searchTerm) : false;
+            const descMatch = b.Descricao ? b.Descricao.toLowerCase().includes(searchTerm) : false;
+            const matchesSearch = nameMatch || descMatch;
+
             return matchesCategory && matchesSearch;
         });
 
         filtered.sort((a, b) => a.Nome.localeCompare(b.Nome));
 
         if (filtered.length === 0) {
-            container.innerHTML = '<div class="status-message">Nenhum negócio ativo encontrado.</div>';
+            container.innerHTML = '<div class="status-message">Nenhum negócio ativo encontrado para sua busca.</div>';
             return;
         }
 
