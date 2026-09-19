@@ -56,7 +56,7 @@
             font-size: 0.85rem;
         }
 
-        /* --- CARD DE DESTAQUE (SUPERIOR - MANTIDO ÚNICO) --- */
+        /* --- CARD DE DESTAQUE (SUPERIOR) --- */
         .featured-container {
             width: 100%;
             max-width: 1100px;
@@ -68,7 +68,7 @@
             background: var(--featured-bg);
             border: 2px solid var(--featured-border);
             border-radius: 12px;
-            padding: 14px;
+            padding: 12px;
             box-shadow: 0 6px 12px -2px rgba(37, 99, 235, 0.08);
             position: relative;
             overflow: hidden;
@@ -82,39 +82,44 @@
             color: white;
             padding: 3px 10px;
             border-radius: 20px;
-            font-size: 0.75rem;
+            font-size: 0.72rem;
             font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 0.5px;
-            margin-bottom: 12px;
+            margin-bottom: 10px;
         }
 
+        /* Força a imagem a ficar ao lado do texto mesmo no celular */
         .featured-body {
             display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        @media (min-width: 768px) {
-            .featured-body {
-                flex-direction: row;
-                align-items: center;
-            }
+            flex-direction: row; 
+            align-items: flex-start;
+            gap: 10px;
         }
 
         .featured-img {
-            width: 100%;
-            height: 160px;
+            width: 110px;
+            height: 110px;
             object-fit: cover;
             border-radius: 8px;
             background-color: #cbd5e1;
+            flex-shrink: 0;
+        }
+
+        @media (min-width: 640px) {
+            .featured-img {
+                width: 180px;
+                height: 140px;
+            }
         }
 
         @media (min-width: 768px) {
             .featured-img {
-                width: 260px;
-                height: 170px;
-                flex-shrink: 0;
+                width: 240px;
+                height: 160px;
+            }
+            .featured-card {
+                padding: 16px;
             }
         }
 
@@ -123,6 +128,7 @@
             display: flex;
             flex-direction: column;
             justify-content: space-between;
+            min-width: 0; /* Previne estouro de texto */
         }
 
         /* --- FILTROS DE BUSCA --- */
@@ -157,12 +163,10 @@
             width: 100%;
             max-width: 1100px;
             display: grid;
-            grid-template-columns: repeat(2, 1fr); /* 2 por linha no celular por padrão */
+            grid-template-columns: repeat(2, 1fr); /* 2 por linha no celular */
             gap: 10px;
         }
 
-        /* Ajuste opcional para celulares um pouco maiores exibirem 3 se desejar, 
-           mas 2 garante ótima visualização em quase todas as telas */
         @media (max-width: 360px) {
             .business-list { grid-template-columns: repeat(2, 1fr); gap: 6px; }
         }
@@ -195,7 +199,7 @@
 
         .card-img {
             width: 100%;
-            height: 110px; /* Altura reduzida para mobile */
+            height: 110px;
             object-fit: cover;
             background-color: #e2e8f0;
         }
@@ -412,7 +416,7 @@
         <p>Encontre e recomende os melhores serviços da região</p>
     </header>
 
-    <!-- Container do Negócio em Destaque (Fica único no topo) -->
+    <!-- Container do Negócio em Destaque (Foto ao lado no mobile e desktop) -->
     <div id="featuredContainer" class="featured-container">
         <div class="featured-card">
             <div class="featured-badge">✨ Conheça este negócio</div>
@@ -428,7 +432,7 @@
         </select>
     </div>
 
-    <!-- Lista de Negócios (2 cards por linha no mobile) -->
+    <!-- Lista de Negócios -->
     <main id="businessList" class="business-list">
         <div class="status-message">Carregando catálogo de parceiros...</div>
     </main>
@@ -636,8 +640,8 @@
                     <div class="card-title">${biz.Nome || 'Sem Nome'}</div>
                     <div class="card-description">${biz.Descricao || 'Sem descrição.'}</div>
                     <div class="card-info">
-                        <p><strong>📍 Endereço:</strong> ${biz.Endereco || 'Não informado'}</p>
-                        <p><strong>📞 Contato:</strong> ${formatPhone(biz.Telefone)}</p>
+                        <p><strong>📍</strong> ${biz.Endereco || 'Não informado'}</p>
+                        <p><strong>📞</strong> ${formatPhone(biz.Telefone)}</p>
                     </div>
                 </div>
                 <div style="display: flex; flex-direction: column; gap: 6px; margin-top: 8px;">
