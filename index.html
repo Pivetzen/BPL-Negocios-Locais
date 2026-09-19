@@ -257,14 +257,12 @@
         .btn-site { background-color: #4f46e5; color: white; }
         .btn-site:hover { background-color: #4338ca; }
         
-        .btn-recommend { 
+        .btn-share { 
             width: 100%; 
-            background-color: #e2e8f0; 
-            color: var(--text); 
+            background-color: var(--success); 
+            color: white; 
         }
-        .btn-recommend:hover { background-color: #cbd5e1; }
-        .btn-recommend.active { background-color: var(--success); color: white; }
-        .btn-recommend.active:hover { background-color: #15803d; }
+        .btn-share:hover { background-color: #15803d; }
 
         .status-message { 
             text-align: center; 
@@ -304,30 +302,13 @@
     </main>
 
 <script>
-    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxQymy9p164zRXSejyK0n1q7RIOV7qcdD9kL9C4xK7rhGQJZaF6HrBK-ydsczinL1SXcA/exec'; 
     const SHEET_ID = '1xHCYeMoeJf0_TItdUivSCH_nTe-2wh5Z0FP9QX0Ok5U';
-    
     const BIZ_SHEET_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?sheet=Negocios&tqx=out:json`;
-    const REC_SHEET_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?sheet=Recomendacoes&tqx=out:json`;
 
     let businesses = [];
-    let globalRecommendations = {}; 
     let randomFeaturedBusiness = null;
 
-    // Gerador de identificador anônimo para o visitante atual
-    function getVisitorId() {
-        let visitorId = localStorage.getItem('guestVisitorId');
-        if (!visitorId) {
-            visitorId = 'guest_' + Math.random().toString(36).substring(2, 9);
-            localStorage.setItem('guestVisitorId', visitorId);
-        }
-        return visitorId;
-    }
-
-    const currentUserId = getVisitorId();
-
     async function init() {
-        await fetchRecommendations();
         await fetchBusinesses();
     }
 
@@ -354,27 +335,20 @@
         return `https://${clean}`;
     }
 
-    async function fetchRecommendations() {
-        try {
-            const response = await fetch(REC_SHEET_URL);
-            const text = await response.text();
-            const jsonString = text.substring(text.indexOf("{"), text.lastIndexOf("}") + 1);
-            const json = JSON.parse(jsonString);
-            const rows = json.table.rows;
-            
-            globalRecommendations = {};
-            rows.forEach(row => {
-                const uId = row.c[0] ? String(row.c[0].v).trim() : '';
-                const negId = row.c[1] ? String(row.c[1].v).trim() : '';
-                if(negId && uId) {
-                    globalRecommendations[negId] = globalRecommendations[negId] || [];
-                    if(!globalRecommendations[negId].includes(uId)) {
-                        globalRecommendations[negId].push(uId);
-                    }
-                }
-            });
-            renderBusinesses();
-        } catch(e) { console.error("Erro ao carregar recomendações:", e); }
+    // Função para gerar o link do WhatsApp com a mensagem personalizada
+    function getShareWhatsappUrl(biz) {
+        const phoneFormatted = formatPhone(biz.Telefone);
+        
+        let msg = `Olá! Quero te indicar este serviço do Guia do Condomínio PRB:\n\n`;
+        msg += `📌 *${biz.Nome}*\n`;
+        if (biz.Categoria) msg += `🏷️ Ramo: ${biz.Categoria}\n`;
+        if (biz.Descricao) msg += `📝 ${biz.Descricao}\n`;
+        if (biz.Telefone) msg += `📞 Contato: ${phoneFormatted}\n`;
+        if (biz.Endereco) msg += `📍 Endereço: ${biz.Endereco}\n`;
+        
+        msg += `\nVeja mais no nosso Guia de Recomendados!`;
+
+        return `https://api.whatsapp.com/send?text=${encodeURIComponent(msg)}`;
     }
 
     function parseSheetDate(rawDate) {
@@ -460,26 +434,6 @@
         document.getElementById('searchInput').addEventListener('input', () => renderBusinesses());
     }
 
-    window.toggleRecommend = async function(negId) {
-        globalRecommendations[negId] = globalRecommendations[negId] || [];
-        if(globalRecommendations[negId].includes(currentUserId)) {
-            globalRecommendations[negId] = globalRecommendations[negId].filter(id => id !== currentUserId);
-        } else {
-            globalRecommendations[negId].push(currentUserId);
-        }
-        renderBusinesses();
-
-        const formData = new URLSearchParams();
-        formData.append('action', 'toggleRecommend');
-        formData.append('negId', negId);
-        formData.append('userId', currentUserId);
-
-        try {
-            await fetch(SCRIPT_URL, { method: 'POST', mode: 'no-cors', body: formData });
-            setTimeout(fetchRecommendations, 1000);
-        } catch(e) { console.error(e); }
-    };
-
     function renderFeaturedCard() {
         const container = document.getElementById('featuredContainer');
         const content = document.getElementById('featuredContent');
@@ -490,14 +444,11 @@
         }
 
         const biz = randomFeaturedBusiness;
-        const recs = globalRecommendations[biz.id] || [];
-        const totalRecommendations = recs.length;
-        const isRecommendedByMe = recs.includes(currentUserId);
-
         const cleanPhone = biz.Telefone ? String(biz.Telefone).replace(/\D/g, '') : '';
         const whatsappUrl = `https://wa.me/${cleanPhone}`;
         const instagramUrl = formatInstagramUrl(biz.Instagram);
         const websiteUrl = formatWebsiteUrl(biz.Site);
+        const shareUrl = getShareWhatsappUrl(biz);
 
         const imgTag = biz.Imagem 
             ? `<img class="featured-img" src="${biz.Imagem}" alt="${biz.Nome}">` 
@@ -511,11 +462,7 @@
         const btnInstagram = instagramUrl ? `<a href="${instagramUrl}" target="_blank" rel="noopener" class="btn btn-insta">Instagram</a>` : '';
         const btnSite = websiteUrl ? `<a href="${websiteUrl}" target="_blank" rel="noopener" class="btn btn-site">Site</a>` : '';
 
-        const btnRecomendo = `
-            <button onclick="toggleRecommend('${biz.id}')" class="btn btn-recommend ${isRecommendedByMe ? 'active' : ''}">
-                👍 Recomendo (${totalRecommendations})
-            </button>
-        `;
+        const btnIndicar = `<a href="${shareUrl}" target="_blank" rel="noopener" class="btn btn-share">📲 Indicar para um amigo</a>`;
 
         const socialRow = (btnWhatsapp || btnInstagram || btnSite) 
             ? `<div class="social-actions">${btnWhatsapp}${btnInstagram}${btnSite}</div>` 
@@ -538,7 +485,7 @@
                 </div>
                 <div style="display: flex; flex-direction: column; gap: 10px; margin-top: 12px;">
                     ${socialRow}
-                    ${btnRecomendo}
+                    ${btnIndicar}
                 </div>
             </div>
         `;
@@ -562,12 +509,7 @@
             return matchesCategory && matchesSearch;
         });
 
-        filtered.sort((a, b) => {
-            const countA = (globalRecommendations[a.id] || []).length;
-            const countB = (globalRecommendations[b.id] || []).length;
-            if (countB !== countA) return countB - countA;
-            return a.Nome.localeCompare(b.Nome);
-        });
+        filtered.sort((a, b) => a.Nome.localeCompare(b.Nome));
 
         if (filtered.length === 0) {
             container.innerHTML = '<div class="status-message">Nenhum negócio ativo encontrado.</div>';
@@ -575,14 +517,11 @@
         }
 
         filtered.forEach(biz => {
-            const recs = globalRecommendations[biz.id] || [];
-            const totalRecommendations = recs.length;
-            const isRecommendedByMe = recs.includes(currentUserId);
-            
             const cleanPhone = biz.Telefone ? String(biz.Telefone).replace(/\D/g, '') : '';
             const whatsappUrl = `https://wa.me/${cleanPhone}`;
             const instagramUrl = formatInstagramUrl(biz.Instagram);
             const websiteUrl = formatWebsiteUrl(biz.Site);
+            const shareUrl = getShareWhatsappUrl(biz);
             
             const imgTag = biz.Imagem 
                 ? `<img class="card-img" src="${biz.Imagem}" alt="${biz.Nome}" loading="lazy">` 
@@ -596,11 +535,7 @@
             const btnInstagram = instagramUrl ? `<a href="${instagramUrl}" target="_blank" rel="noopener" class="btn btn-insta">Instagram</a>` : '';
             const btnSite = websiteUrl ? `<a href="${websiteUrl}" target="_blank" rel="noopener" class="btn btn-site">Site</a>` : '';
             
-            const btnRecomendo = `
-                <button onclick="toggleRecommend('${biz.id}')" class="btn btn-recommend ${isRecommendedByMe ? 'active' : ''}">
-                    👍 Recomendo (${totalRecommendations})
-                </button>
-            `;
+            const btnIndicar = `<a href="${shareUrl}" target="_blank" rel="noopener" class="btn btn-share">📲 Indicar para um amigo</a>`;
 
             const socialRow = (btnWhatsapp || btnInstagram || btnSite) 
                 ? `<div class="social-actions">${btnWhatsapp}${btnInstagram}${btnSite}</div>` 
@@ -624,7 +559,7 @@
                 </div>
                 <div class="card-actions">
                     ${socialRow}
-                    ${btnRecomendo}
+                    ${btnIndicar}
                 </div>
             `;
             container.appendChild(card);
