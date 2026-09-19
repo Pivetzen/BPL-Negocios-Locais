@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>BPL - Negócios Locais</title>
+    <title>Condomínio Parque Rio Branco</title>
     
     <!-- FAVICON COM A IMAGEM DO PIXABAY -->
     <link rel="icon" type="image/png" href="https://cdn.pixabay.com/photo/2015/12/23/01/14/edit-1105049_1280.png">
@@ -465,10 +465,11 @@
         <!-- ÁREA COM ROLAGEM INDEPENDENTE -->
         <div class="main-content" id="mainContent">
             <header>
-                <h1>BPL - Negócios Locais</h1>
+                <h1>CONDOMÍNIO PARQUE RIO BRANCO</h1>
+                <p>Negócios Locais</p>
                 <p>Encontre e recomende os melhores serviços da região</p>
                 <!-- BOTÃO PARA CADASTRAR EMPRESA -->
-                <a href="https://wa.me/5585987804628?text=Ol%C3%A1!%20Gostaria%20de%20cadastrar%20minha%20empresa%20no%20aplicativo%20BPL%20-%20Neg%C3%B3cios%20Locais." 
+                <a href="https://wa.me/5585987804628?text=Ol%C3%A1!%20Gostaria%20de%20cadastrar%20minha%20empresa%20no%20aplicativo%20BPL%20-%20Neg%C3%B3cios%20Locais. >CONDOMÍNIO PARQUE RIO BRANCO<" 
                    target="_blank" 
                    rel="noopener" 
                    class="btn-register">
@@ -573,14 +574,14 @@
     function getShareWhatsappUrl(biz) {
         const phoneFormatted = formatPhone(biz.Telefone);
         
-        let msg = `Olá! Quero te indicar este serviço que encontrei no BPL - Negócios Locais:\n\n`;
+        let msg = `Olá! Quero te indicar este serviço que encontrei no BPL - Negócios Locais:\n>CONDOMÍNIO PARQUE RIO BRANCO<\n`;
         msg += `📌 *${biz.Nome}*\n`;
         if (biz.Categoria) msg += `🏷️ Ramo: ${biz.Categoria}\n`;
         if (biz.Descricao) msg += `📝 ${biz.Descricao}\n`;
         if (biz.Telefone) msg += `📞 Contato: ${phoneFormatted}\n`;
         if (biz.Endereco) msg += `📍 Endereço: ${biz.Endereco}\n`;
         
-        msg += `\n👉 *BPL - Negócios Locais*\nAcesse pelo link: https://tinyurl.com/BLP-Negocios-Locais`;
+        msg += `\n👉 *BPL - Negócios Locais*\n>CONDOMÍNIO PARQUE RIO BRANCO<\nAcesse pelo link: https://tinyurl.com/BLP-Negocios-Locais`;
 
         return `https://api.whatsapp.com/send?text=${encodeURIComponent(msg)}`;
     }
