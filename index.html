@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>BPL - Negócios Locais</title>
     <!-- Ícones FontAwesome para a seção de doação -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -44,6 +44,7 @@
             display: flex;
             flex-direction: column;
             height: 100vh;
+            height: 100dvh; /* Altura dinâmica que respeita a barra de navegação/URL */
             width: 100vw;
             position: absolute;
             top: 0;
@@ -338,13 +339,14 @@
             grid-column: 1 / -1; 
         }
 
-        /* --- RODAPÉ TOTALMENTE FIXO E INDEPENDENTE --- */
+        /* --- RODAPÉ TOTALMENTE FIXO E ACIMA DA BARRA DE NAVEGAÇÃO --- */
         .donation-footer {
             flex-shrink: 0;
             width: 100%;
             background-color: #f1f5f9;
             border-top: 1px solid #cbd5e1;
             padding: 10px 12px;
+            padding-bottom: calc(10px + env(safe-area-inset-bottom, 12px));
             text-align: center;
             font-size: 0.75rem;
             color: #475569;
@@ -461,7 +463,7 @@
             </main>
         </div>
 
-        <!-- RODAPÉ TOTALMENTE FIXO -->
+        <!-- RODAPÉ TOTALMENTE FIXO E VISÍVEL -->
         <footer class="donation-footer">
             <div class="donation-card">
                 <p class="donation-title">
