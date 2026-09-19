@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Recomendados - PRB</title>
+    <title>BPL - Negócios Locais</title>
     <!-- Ícones FontAwesome para a seção de doação -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -455,7 +455,7 @@
                 <i class="fa-solid fa-check-circle"></i> Código Copia e Cola gravado! Abra seu banco para pagar.
             </p>
         </div>
-        <p style="font-size: 0.65rem; color: #94a3b8;">Guia de Recomendados BPL © 2026</p>
+        <p style="font-size: 0.65rem; color: #94a3b8;">BPL - Negócios Locais @ 2026</p>
     </footer>
 
 <script>
@@ -500,14 +500,14 @@
     function getShareWhatsappUrl(biz) {
         const phoneFormatted = formatPhone(biz.Telefone);
         
-        let msg = `Olá! Quero te indicar este serviço do Guia do Condomínio PRB:\n\n`;
+        let msg = `Olá! Quero te indicar este serviço que encontrei no BPL - Negócios Locais:\n\n`;
         msg += `📌 *${biz.Nome}*\n`;
         if (biz.Categoria) msg += `🏷️ Ramo: ${biz.Categoria}\n`;
         if (biz.Descricao) msg += `📝 ${biz.Descricao}\n`;
         if (biz.Telefone) msg += `📞 Contato: ${phoneFormatted}\n`;
         if (biz.Endereco) msg += `📍 Endereço: ${biz.Endereco}\n`;
         
-        msg += `\nVeja mais no nosso Guia de Recomendados:\nhttps://tinyurl.com/BLP-Negocios-Locais`;
+        msg += `\n👉 *BPL - Negócios Locais*\nAcesse pelo link: https://tinyurl.com/BLP-Negocios-Locais`;
 
         return `https://api.whatsapp.com/send?text=${encodeURIComponent(msg)}`;
     }
