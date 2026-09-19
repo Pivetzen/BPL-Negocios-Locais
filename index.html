@@ -28,14 +28,33 @@
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
         }
 
-        body {
+        /* Bloqueia o scroll e o zoom na página principal */
+        html, body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
             background-color: var(--bg);
             color: var(--text);
-            padding: 16px 8px 160px 8px; /* Margem inferior para o rodapé fixo */
+            touch-action: pan-x pan-y;
+        }
+
+        /* Estrutura principal em App Layout (Header + Conteúdo Scrollável + Rodapé) */
+        .app-layout {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            width: 100vw;
+        }
+
+        /* Área central que ganha barra de rolagem isolada */
+        .main-content {
+            flex: 1;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+            padding: 16px 8px 20px 8px;
             display: flex;
             flex-direction: column;
             align-items: center;
-            min-height: 100vh;
         }
 
         header {
@@ -89,7 +108,6 @@
             margin-bottom: 10px;
         }
 
-        /* Força a imagem a ficar ao lado do texto mesmo no celular */
         .featured-body {
             display: flex;
             flex-direction: row; 
@@ -128,7 +146,7 @@
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            min-width: 0; /* Previne estouro de texto */
+            min-width: 0;
         }
 
         /* --- FILTROS DE BUSCA --- */
@@ -163,7 +181,7 @@
             width: 100%;
             max-width: 1100px;
             display: grid;
-            grid-template-columns: repeat(2, 1fr); /* 2 por linha no celular */
+            grid-template-columns: repeat(2, 1fr);
             gap: 10px;
         }
 
@@ -179,7 +197,7 @@
             .business-list { grid-template-columns: repeat(4, 1fr); gap: 20px; } 
         }
 
-        /* --- CARD INDIVIDUAL COMPACTO --- */
+        /* --- CARD INDIVIDUAL --- */
         .card {
             background: var(--card-bg);
             border-radius: 10px;
@@ -316,11 +334,9 @@
             grid-column: 1 / -1; 
         }
 
-        /* --- SEÇÃO FIXA DE DOAÇÃO VIA PIX (RODAPÉ) --- */
+        /* --- RODAPÉ TOTALMENTE INDEPENDENTE --- */
         .donation-footer {
-            position: fixed;
-            bottom: 0;
-            left: 0;
+            flex-shrink: 0;
             width: 100%;
             background-color: #f1f5f9;
             border-top: 1px solid #cbd5e1;
@@ -328,8 +344,8 @@
             text-align: center;
             font-size: 0.75rem;
             color: #475569;
-            z-index: 50;
             box-shadow: 0 -4px 6px -1px rgba(0, 0, 0, 0.08);
+            z-index: 100;
         }
 
         .donation-card {
@@ -411,52 +427,57 @@
 </head>
 <body>
 
-    <header>
-        <h1>BPL - Negócios Locais</h1>
-        <p>Encontre e recomende os melhores serviços da região</p>
-    </header>
+    <div class="app-layout">
+        <!-- ÁREA COM SCROLL DA PÁGINA -->
+        <div class="main-content">
+            <header>
+                <h1>BPL - Negócios Locais</h1>
+                <p>Encontre e recomende os melhores serviços da região</p>
+            </header>
 
-    <!-- Container do Negócio em Destaque (Foto ao lado no mobile e desktop) -->
-    <div id="featuredContainer" class="featured-container">
-        <div class="featured-card">
-            <div class="featured-badge">✨ Conheça este negócio</div>
-            <div id="featuredContent" class="featured-body"></div>
-        </div>
-    </div>
-
-    <!-- Filtros de Busca -->
-    <div class="search-container">
-        <input type="text" id="searchInput" class="search-input" placeholder="Buscar por nome do negócio...">
-        <select id="categoryFilter" class="filter-select">
-            <option value="todos">Todos os ramos/categorias</option>
-        </select>
-    </div>
-
-    <!-- Lista de Negócios -->
-    <main id="businessList" class="business-list">
-        <div class="status-message">Carregando catálogo de parceiros...</div>
-    </main>
-
-    <!-- RODAPÉ FIXO DE DOAÇÃO VIA PIX -->
-    <footer class="donation-footer">
-        <div class="donation-card">
-            <p class="donation-title">
-                <i class="fa-solid fa-heart" style="color: #ef4444;"></i> Gostou do app? Apoie o projeto!
-            </p>
-            <p class="donation-subtitle">Sua doação ajuda a manter a ferramenta online.</p>
-            
-            <div class="donation-controls">
-                <input type="text" id="inputValorDoacao" value="Digite um valor..." oninput="mascaraMoeda(this)" class="donation-input">
-                <button onclick="gerarECopiarPixDoacao()" class="btn-pix">
-                    <i class="fa-regular fa-copy"></i> Copiar Pix
-                </button>
+            <!-- Container do Negócio em Destaque -->
+            <div id="featuredContainer" class="featured-container">
+                <div class="featured-card">
+                    <div class="featured-badge">✨ Conheça este negócio</div>
+                    <div id="featuredContent" class="featured-body"></div>
+                </div>
             </div>
-            <p id="msgSucessoPix" class="pix-success-msg">
-                <i class="fa-solid fa-check-circle"></i> Código Copia e Cola gravado! Abra seu banco para pagar.
-            </p>
+
+            <!-- Filtros de Busca -->
+            <div class="search-container">
+                <input type="text" id="searchInput" class="search-input" placeholder="Buscar por nome do negócio...">
+                <select id="categoryFilter" class="filter-select">
+                    <option value="todos">Todos os ramos/categorias</option>
+                </select>
+            </div>
+
+            <!-- Lista de Negócios -->
+            <main id="businessList" class="business-list">
+                <div class="status-message">Carregando catálogo de parceiros...</div>
+            </main>
         </div>
-        <p style="font-size: 0.65rem; color: #94a3b8;">BPL - Negócios Locais @ 2026</p>
-    </footer>
+
+        <!-- RODAPÉ FIXO E INDEPENDENTE DO SCROLL/ZOOM -->
+        <footer class="donation-footer">
+            <div class="donation-card">
+                <p class="donation-title">
+                    <i class="fa-solid fa-heart" style="color: #ef4444;"></i> Gostou do app? Apoie o projeto!
+                </p>
+                <p class="donation-subtitle">Sua doação ajuda a manter a ferramenta online.</p>
+                
+                <div class="donation-controls">
+                    <input type="text" id="inputValorDoacao" value="Digite um valor..." oninput="mascaraMoeda(this)" class="donation-input">
+                    <button onclick="gerarECopiarPixDoacao()" class="btn-pix">
+                        <i class="fa-regular fa-copy"></i> Copiar Pix
+                    </button>
+                </div>
+                <p id="msgSucessoPix" class="pix-success-msg">
+                    <i class="fa-solid fa-check-circle"></i> Código Copia e Cola gravado! Abra seu banco para pagar.
+                </p>
+            </div>
+            <p style="font-size: 0.65rem; color: #94a3b8;">BPL - Negócios Locais @ 2026</p>
+        </footer>
+    </div>
 
 <script>
     const SHEET_ID = '1xHCYeMoeJf0_TItdUivSCH_nTe-2wh5Z0FP9QX0Ok5U';
