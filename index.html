@@ -486,7 +486,7 @@
 
             <!-- Filtros de Busca -->
             <div class="search-container">
-                <input type="text" id="searchInput" class="search-input" placeholder="Buscar por nome ou palavras-chave na descrição...">
+                <input type="text" id="searchInput" class="search-input" placeholder="Buscar por nome, palavras-chave ou descrição...">
                 <select id="categoryFilter" class="filter-select">
                     <option value="todos">Todos os ramos/categorias</option>
                 </select>
@@ -623,7 +623,8 @@
             businesses = rows.map((row) => {
                 if(row.c[0] && row.c[0].v === "NEG_ID") return null;
                 
-                const rawVencimento = row.c[10] ? (row.c[10].v || row.c[10].f) : null;
+                // Coluna K (índice 10) para Vencimento - Ajuste se necessário conforme sua planilha
+                const rawVencimento = row.c[11] ? (row.c[11].v || row.c[11].f) : null;
                 const vencimentoDate = parseSheetDate(rawVencimento);
                 const isActive = vencimentoDate && vencimentoDate >= today;
 
@@ -638,6 +639,7 @@
                     Descricao: row.c[7] ? row.c[7].v : '',
                     Imagem: row.c[8] ? row.c[8].v : '',
                     Local: row.c[9] ? row.c[9].v : '',
+                    PalavrasChave: row.c[10] ? row.c[10].v : '', // Mapeamento da coluna K (índice 10) para Palavras-Chave
                     IsActive: isActive
                 };
             }).filter(b => b && b.IsActive);
@@ -742,7 +744,9 @@
             
             const nameMatch = b.Nome ? b.Nome.toLowerCase().includes(searchTerm) : false;
             const descMatch = b.Descricao ? b.Descricao.toLowerCase().includes(searchTerm) : false;
-            const matchesSearch = nameMatch || descMatch;
+            const keywordMatch = b.PalavrasChave ? b.PalavrasChave.toLowerCase().includes(searchTerm) : false;
+            
+            const matchesSearch = nameMatch || descMatch || keywordMatch;
 
             return matchesCategory && matchesSearch;
         });
