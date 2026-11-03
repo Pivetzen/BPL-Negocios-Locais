@@ -23,6 +23,7 @@
             --tag-text: #d97706;
             --featured-bg: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
             --featured-border: #bfdbfe;
+            --star-color: #f59e0b;
         }
 
         * {
@@ -106,6 +107,49 @@
             transform: translateY(-2px);
             box-shadow: 0 6px 14px rgba(37, 99, 235, 0.35);
             background: linear-gradient(135deg, #1d4ed8 0%, #1e40af 100%);
+        }
+
+        /* --- SISTEMA DE AVALIAÇÃO (ESTRELAS) --- */
+        .rating-container {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-bottom: 6px;
+            font-size: 0.75rem;
+            color: var(--text-light);
+        }
+
+        .stars-outer {
+            position: relative;
+            display: inline-block;
+            font-family: "Font Awesome 6 Free";
+            font-weight: 900;
+            color: #cbd5e1;
+            letter-spacing: 2px;
+        }
+
+        .stars-outer::before {
+            content: "\f005 \f005 \f005 \f005 \f005";
+        }
+
+        .stars-inner {
+            position: absolute;
+            top: 0;
+            left: 0;
+            white-space: nowrap;
+            overflow: hidden;
+            width: 0;
+            color: var(--star-color);
+            letter-spacing: 2px;
+        }
+
+        .stars-inner::before {
+            content: "\f005 \f005 \f005 \f005 \f005";
+        }
+
+        .rating-score {
+            font-weight: 700;
+            color: var(--text);
         }
 
         /* --- CARD DE DESTAQUE --- */
@@ -351,13 +395,27 @@
         .btn-site { background-color: #4f46e5; color: white; }
         .btn-site:hover { background-color: #4338ca; }
         
+        .btn-row-secondary {
+            display: flex;
+            gap: 4px;
+            width: 100%;
+        }
+
         .btn-share { 
-            width: 100%; 
+            flex: 1;
             background-color: var(--success); 
             color: white; 
             font-size: 0.72rem;
         }
         .btn-share:hover { background-color: #15803d; }
+
+        .btn-rate {
+            flex: 1;
+            background-color: #f59e0b;
+            color: white;
+            font-size: 0.72rem;
+        }
+        .btn-rate:hover { background-color: #d97706; }
 
         .status-message { 
             text-align: center; 
@@ -534,6 +592,9 @@
 
     const SHEET_ID = '1xHCYeMoeJf0_TItdUivSCH_nTe-2wh5Z0FP9QX0Ok5U';
     const BIZ_SHEET_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?sheet=Negocios&tqx=out:json`;
+    
+    // Substitua pelo link real do seu Google Forms criado no Passo 1
+    const GOOGLE_FORM_URL = 'https://forms.gle/SEU_LINK_DO_GOOGLE_FORMS_AQUI';
 
     // --- CONFIGURAÇÃO DO PIX DE DOAÇÃO ---
     const CHAVE_PIX_RECEPTOR = "matheuzzu@hotmail.com";
@@ -585,6 +646,22 @@
         return `https://api.whatsapp.com/send?text=${encodeURIComponent(msg)}`;
     }
 
+    function renderRatingHtml(rating, count) {
+        const score = parseFloat(rating) || 0;
+        const total = parseInt(count) || 0;
+        const percentage = (score / 5) * 100;
+
+        return `
+            <div class="rating-container">
+                <div class="stars-outer">
+                    <div class="stars-inner" style="width: ${percentage}%;"></div>
+                </div>
+                <span class="rating-score">${score.toFixed(1)}</span>
+                <span>(${total})</span>
+            </div>
+        `;
+    }
+
     function parseSheetDate(rawDate) {
         if (!rawDate) return null;
         if (typeof rawDate === 'string' && rawDate.startsWith('Date(')) {
@@ -623,7 +700,6 @@
             businesses = rows.map((row) => {
                 if(row.c[0] && row.c[0].v === "NEG_ID") return null;
                 
-                // Coluna K (índice 10) para Vencimento - Ajuste se necessário conforme sua planilha
                 const rawVencimento = row.c[11] ? (row.c[11].v || row.c[11].f) : null;
                 const vencimentoDate = parseSheetDate(rawVencimento);
                 const isActive = vencimentoDate && vencimentoDate >= today;
@@ -639,7 +715,10 @@
                     Descricao: row.c[7] ? row.c[7].v : '',
                     Imagem: row.c[8] ? row.c[8].v : '',
                     Local: row.c[9] ? row.c[9].v : '',
-                    PalavrasChave: row.c[10] ? row.c[10].v : '', // Mapeamento da coluna K (índice 10) para Palavras-Chave
+                    PalavrasChave: row.c[10] ? row.c[10].v : '',
+                    // Ajuste os índices N (13) e O (14) conforme posicionar na sua planilha
+                    MediaAvaliacoes: row.c[13] ? (row.c[13].v || 0) : 0,
+                    TotalAvaliacoes: row.c[14] ? (row.c[14].v || 0) : 0,
                     IsActive: isActive
                 };
             }).filter(b => b && b.IsActive);
@@ -698,7 +777,9 @@
         const btnInstagram = instagramUrl ? `<a href="${instagramUrl}" target="_blank" rel="noopener" class="btn btn-insta">Insta</a>` : '';
         const btnSite = websiteUrl ? `<a href="${websiteUrl}" target="_blank" rel="noopener" class="btn btn-site">Site</a>` : '';
 
-        const btnIndicar = `<a href="${shareUrl}" target="_blank" rel="noopener" class="btn btn-share">📲 Indicar Amigo</a>`;
+        const ratingHtml = renderRatingHtml(biz.MediaAvaliacoes, biz.TotalAvaliacoes);
+        const btnIndicar = `<a href="${shareUrl}" target="_blank" rel="noopener" class="btn btn-share">📲 Indicar</a>`;
+        const btnAvaliar = `<a href="${GOOGLE_FORM_URL}" target="_blank" rel="noopener" class="btn btn-rate">⭐ Avaliar</a>`;
 
         const socialRow = (btnWhatsapp || btnInstagram || btnSite) 
             ? `<div class="social-actions">${btnWhatsapp}${btnInstagram}${btnSite}</div>` 
@@ -713,6 +794,7 @@
                         ${buildingTag}
                     </div>
                     <div class="card-title">${biz.Nome || 'Sem Nome'}</div>
+                    ${ratingHtml}
                     <div class="card-description">${biz.Descricao || 'Sem descrição.'}</div>
                     <div class="card-info">
                         <p><strong>📍</strong> ${biz.Endereco || 'Não informado'}</p>
@@ -721,7 +803,10 @@
                 </div>
                 <div style="display: flex; flex-direction: column; gap: 6px; margin-top: 8px;">
                     ${socialRow}
-                    ${btnIndicar}
+                    <div class="btn-row-secondary">
+                        ${btnIndicar}
+                        ${btnAvaliar}
+                    </div>
                 </div>
             </div>
         `;
@@ -777,7 +862,9 @@
             const btnInstagram = instagramUrl ? `<a href="${instagramUrl}" target="_blank" rel="noopener" class="btn btn-insta">Insta</a>` : '';
             const btnSite = websiteUrl ? `<a href="${websiteUrl}" target="_blank" rel="noopener" class="btn btn-site">Site</a>` : '';
             
+            const ratingHtml = renderRatingHtml(biz.MediaAvaliacoes, biz.TotalAvaliacoes);
             const btnIndicar = `<a href="${shareUrl}" target="_blank" rel="noopener" class="btn btn-share">📲 Indicar</a>`;
+            const btnAvaliar = `<a href="${GOOGLE_FORM_URL}" target="_blank" rel="noopener" class="btn btn-rate">⭐ Avaliar</a>`;
 
             const socialRow = (btnWhatsapp || btnInstagram || btnSite) 
                 ? `<div class="social-actions">${btnWhatsapp}${btnInstagram}${btnSite}</div>` 
@@ -793,6 +880,7 @@
                         ${buildingTag}
                     </div>
                     <div class="card-title">${biz.Nome || 'Sem Nome'}</div>
+                    ${ratingHtml}
                     <div class="card-description">${biz.Descricao || 'Sem descrição.'}</div>
                     <div class="card-info">
                         <p><strong>📍</strong> ${biz.Endereco || 'Não informado'}</p>
@@ -801,7 +889,10 @@
                 </div>
                 <div class="card-actions">
                     ${socialRow}
-                    ${btnIndicar}
+                    <div class="btn-row-secondary">
+                        ${btnIndicar}
+                        ${btnAvaliar}
+                    </div>
                 </div>
             `;
             container.appendChild(card);
@@ -863,7 +954,7 @@
         const inputElement = document.getElementById('inputValorDoacao');
         let rawDigits = inputElement.value.replace(/\D/g, "");
         
-        if (!rawDigits) {
+        if (!rawDigits, rawDigits.length === 0) {
             alert('Por favor, informe um valor de doação válido.');
             return;
         }
