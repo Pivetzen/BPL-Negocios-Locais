@@ -106,10 +106,10 @@
         .btn-register:hover {
             transform: translateY(-2px);
             box-shadow: 0 6px 14px rgba(37, 99, 235, 0.35);
-            background: linear-gradient(135deg, #1d4ed8 0%, #1e40af 100%);
+            background: linear-gradient(135deg, #1d4ed8 100%, #1e40af 100%);
         }
 
-        /* --- SISTEMA DE AVALIAÇÃO (ESTRELAS) --- */
+        /* --- SISTEMA DE AVALIAÇÃO (ESTRELAS) CORRIGIDO --- */
         .rating-container {
             display: flex;
             align-items: center;
@@ -119,32 +119,27 @@
             color: var(--text-light);
         }
 
-        .stars-outer {
+        .stars {
+            display: inline-flex;
             position: relative;
-            display: inline-block;
-            font-family: "Font Awesome 6 Free";
-            font-weight: 900;
+            font-size: 0.8rem;
+        }
+
+        .stars-empty {
+            display: flex;
             color: #cbd5e1;
-            letter-spacing: 2px;
+            gap: 2px;
         }
 
-        .stars-outer::before {
-            content: "\f005 \f005 \f005 \f005 \f005";
-        }
-
-        .stars-inner {
+        .stars-fill {
+            display: flex;
             position: absolute;
             top: 0;
             left: 0;
             white-space: nowrap;
             overflow: hidden;
-            width: 0;
             color: var(--star-color);
-            letter-spacing: 2px;
-        }
-
-        .stars-inner::before {
-            content: "\f005 \f005 \f005 \f005 \f005";
+            gap: 2px;
         }
 
         .rating-score {
@@ -593,7 +588,6 @@
     const SHEET_ID = '1xHCYeMoeJf0_TItdUivSCH_nTe-2wh5Z0FP9QX0Ok5U';
     const BIZ_SHEET_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?sheet=Negocios&tqx=out:json`;
     
-    // Link do formulário fornecido
     const GOOGLE_FORM_URL = 'https://forms.gle/reSPVKvJZi4mK2Yk9';
 
     // --- CONFIGURAÇÃO DO PIX DE DOAÇÃO ---
@@ -651,10 +645,13 @@
         const total = parseInt(count) || 0;
         const percentage = Math.min(Math.max((score / 5) * 100, 0), 100);
 
+        const starsHtml = '<i class="fa-solid fa-star"></i>'.repeat(5);
+
         return `
             <div class="rating-container">
-                <div class="stars-outer">
-                    <div class="stars-inner" style="width: ${percentage}%;"></div>
+                <div class="stars">
+                    <div class="stars-empty">${starsHtml}</div>
+                    <div class="stars-fill" style="width: ${percentage}%;">${starsHtml}</div>
                 </div>
                 <span class="rating-score">${score.toFixed(1)}</span>
                 <span>(${total})</span>
@@ -716,7 +713,6 @@
                     Imagem: row.c[8] ? row.c[8].v : '',
                     Local: row.c[9] ? row.c[9].v : '',
                     PalavrasChave: row.c[10] ? row.c[10].v : '',
-                    // Coluna N (índice 13) = Média / Coluna O (índice 14) = Total
                     MediaAvaliacoes: row.c[13] ? (row.c[13].v || 0) : 0,
                     TotalAvaliacoes: row.c[14] ? (row.c[14].v || 0) : 0,
                     IsActive: isActive
@@ -959,7 +955,7 @@
             return;
         }
 
-        const valor = parseFloat(rawDigits) / 100;
+,        const valor = parseFloat(rawDigits) / 100;
 
         if (isNaN(valor) || valor <= 0) {
             alert('Por favor, informe um valor de doação válido.');
