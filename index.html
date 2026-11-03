@@ -109,7 +109,7 @@
             background: linear-gradient(135deg, #1d4ed8 100%, #1e40af 100%);
         }
 
-        /* --- SISTEMA DE AVALIAÇÃO (ESTRELAS) CORRIGIDO --- */
+        /* --- SISTEMA DE AVALIAÇÃO (ESTRELAS) --- */
         .rating-container {
             display: flex;
             align-items: center;
@@ -145,6 +145,127 @@
         .rating-score {
             font-weight: 700;
             color: var(--text);
+        }
+
+        .rating-count-btn {
+            background: none;
+            border: none;
+            color: var(--primary);
+            font-weight: 600;
+            cursor: pointer;
+            padding: 0;
+            font-size: 0.75rem;
+            text-decoration: underline;
+        }
+
+        .rating-count-btn:hover {
+            color: var(--primary-hover);
+        }
+
+        /* --- MODAL DE AVALIAÇÕES --- */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+            padding: 16px;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s ease;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal-content {
+            background: var(--card-bg);
+            width: 100%;
+            max-width: 480px;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+            display: flex;
+            flex-direction: column;
+            max-height: 85vh;
+            overflow: hidden;
+            animation: modalScale 0.2s ease;
+        }
+
+        @keyframes modalScale {
+            from { transform: scale(0.95); }
+            to { transform: scale(1); }
+        }
+
+        .modal-header {
+            padding: 14px 16px;
+            border-bottom: 1px solid #e2e8f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #f8fafc;
+        }
+
+        .modal-title {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 1.1rem;
+            color: var(--text-light);
+            cursor: pointer;
+            padding: 4px;
+        }
+
+        .modal-body {
+            padding: 16px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .review-item {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 10px 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .review-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .review-stars {
+            color: var(--star-color);
+            font-size: 0.75rem;
+        }
+
+        .review-date {
+            font-size: 0.65rem;
+            color: var(--text-light);
+        }
+
+        .review-comment {
+            font-size: 0.8rem;
+            color: var(--text);
+            word-break: break-word;
+            margin-top: 2px;
         }
 
         /* --- CARD DE DESTAQUE --- */
@@ -573,6 +694,19 @@
         </footer>
     </div>
 
+    <!-- MODAL DE AVALIAÇÕES -->
+    <div id="reviewsModal" class="modal-overlay" onclick="fecharModalReviews(event)">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <div class="modal-header">
+                <div class="modal-title" id="modalBusinessName">Avaliações</div>
+                <button class="modal-close" onclick="fecharModalReviewsDirect()"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-body" id="modalReviewsList">
+                <!-- Conteúdo injetado via JS -->
+            </div>
+        </div>
+    </div>
+
 <script>
     // --- BLOQUEIO DE ZOOM DE PINÇA VIA JS ---
     document.addEventListener('touchmove', function (event) {
@@ -587,6 +721,7 @@
 
     const SHEET_ID = '1xHCYeMoeJf0_TItdUivSCH_nTe-2wh5Z0FP9QX0Ok5U';
     const BIZ_SHEET_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?sheet=Negocios&tqx=out:json`;
+    const REVIEWS_SHEET_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?sheet=Avaliacoes&tqx=out:json`;
     
     const GOOGLE_FORM_URL = 'https://forms.gle/reSPVKvJZi4mK2Yk9';
 
@@ -596,10 +731,34 @@
     const CIDADE_RECEPTOR = "FORTALEZA";
 
     let businesses = [];
+    let allReviews = [];
     let randomFeaturedBusiness = null;
 
     async function init() {
-        await fetchBusinesses();
+        await Promise.all([fetchBusinesses(), fetchReviews()]);
+    }
+
+    async function fetchReviews() {
+        try {
+            const response = await fetch(REVIEWS_SHEET_URL);
+            const text = await response.text();
+            const jsonString = text.substring(text.indexOf("{"), text.lastIndexOf("}") + 1);
+            const json = JSON.parse(jsonString);
+            const rows = json.table.rows;
+            
+            allReviews = rows.map((row) => {
+                if(row.c[0] && String(row.c[0].v).toLowerCase().includes('carimbo')) return null;
+                
+                return {
+                    timestamp: row.c[0] ? (row.c[0].f || row.c[0].v) : '',
+                    empresa: row.c[1] ? String(row.c[1].v).trim() : '',
+                    nota: row.c[2] ? parseFloat(row.c[2].v) || 0 : 0,
+                    comentario: row.c[3] ? row.c[3].v : 'Sem comentário.'
+                };
+            }).filter(r => r && r.empresa);
+        } catch (error) {
+            console.error("Erro ao carregar avaliações:", error);
+        }
     }
 
     function formatPhone(phone) {
@@ -640,7 +799,51 @@
         return `https://api.whatsapp.com/send?text=${encodeURIComponent(msg)}`;
     }
 
-    function renderRatingHtml(rating, count) {
+    function abrirModalReviews(nomeEmpresa) {
+        const modal = document.getElementById('reviewsModal');
+        const titleEl = document.getElementById('modalBusinessName');
+        const listEl = document.getElementById('modalReviewsList');
+
+        titleEl.innerText = `Avaliações de ${nomeEmpresa}`;
+        listEl.innerHTML = '';
+
+        const filteredReviews = allReviews.filter(r => r.empresa.toLowerCase() === nomeEmpresa.toLowerCase());
+
+        if (filteredReviews.length === 0) {
+            listEl.innerHTML = `<div style="text-align: center; color: var(--text-light); padding: 20px; font-size: 0.85rem;">Nenhuma avaliação aprovada para este negócio ainda.</div>`;
+        } else {
+            filteredReviews.forEach(rev => {
+                const starsCount = Math.min(Math.max(rev.nota, 0), 5);
+                const starsStr = '<i class="fa-solid fa-star"></i>'.repeat(starsCount);
+                
+                const item = document.createElement('div');
+                item.className = 'review-item';
+                item.innerHTML = `
+                    <div class="review-header">
+                        <div class="review-stars">${starsStr} (${rev.nota.toFixed(1)})</div>
+                        <div class="review-date">${rev.timestamp}</div>
+                    </div>
+                    <div class="review-comment">"${rev.comentario}"</div>
+                `;
+                listEl.appendChild(item);
+            });
+        }
+
+        modal.classList.add('active');
+    }
+
+    function fecharModalReviewsDirect() {
+        const modal = document.getElementById('reviewsModal');
+        modal.classList.remove('active');
+    }
+
+    function fecharModalReviews(event) {
+        if (event.target.id === 'reviewsModal') {
+            fecharModalReviewsDirect();
+        }
+    }
+
+    function renderRatingHtml(rating, count, businessName) {
         const score = parseFloat(rating) || 0;
         const total = parseInt(count) || 0;
         const percentage = Math.min(Math.max((score / 5) * 100, 0), 100);
@@ -654,7 +857,7 @@
                     <div class="stars-fill" style="width: ${percentage}%;">${starsHtml}</div>
                 </div>
                 <span class="rating-score">${score.toFixed(1)}</span>
-                <span>(${total})</span>
+                <button class="rating-count-btn" onclick="abrirModalReviews('${businessName.replace(/'/g, "\\'")}')">(${total})</button>
             </div>
         `;
     }
@@ -773,7 +976,7 @@
         const btnInstagram = instagramUrl ? `<a href="${instagramUrl}" target="_blank" rel="noopener" class="btn btn-insta">Insta</a>` : '';
         const btnSite = websiteUrl ? `<a href="${websiteUrl}" target="_blank" rel="noopener" class="btn btn-site">Site</a>` : '';
 
-        const ratingHtml = renderRatingHtml(biz.MediaAvaliacoes, biz.TotalAvaliacoes);
+        const ratingHtml = renderRatingHtml(biz.MediaAvaliacoes, biz.TotalAvaliacoes, biz.Nome);
         const btnIndicar = `<a href="${shareUrl}" target="_blank" rel="noopener" class="btn btn-share">📲 Indicar</a>`;
         const btnAvaliar = `<a href="${GOOGLE_FORM_URL}" target="_blank" rel="noopener" class="btn btn-rate">⭐ Avaliar</a>`;
 
@@ -858,7 +1061,7 @@
             const btnInstagram = instagramUrl ? `<a href="${instagramUrl}" target="_blank" rel="noopener" class="btn btn-insta">Insta</a>` : '';
             const btnSite = websiteUrl ? `<a href="${websiteUrl}" target="_blank" rel="noopener" class="btn btn-site">Site</a>` : '';
             
-            const ratingHtml = renderRatingHtml(biz.MediaAvaliacoes, biz.TotalAvaliacoes);
+            const ratingHtml = renderRatingHtml(biz.MediaAvaliacoes, biz.TotalAvaliacoes, biz.Nome);
             const btnIndicar = `<a href="${shareUrl}" target="_blank" rel="noopener" class="btn btn-share">📲 Indicar</a>`;
             const btnAvaliar = `<a href="${GOOGLE_FORM_URL}" target="_blank" rel="noopener" class="btn btn-rate">⭐ Avaliar</a>`;
 
