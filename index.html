@@ -593,8 +593,8 @@
     const SHEET_ID = '1xHCYeMoeJf0_TItdUivSCH_nTe-2wh5Z0FP9QX0Ok5U';
     const BIZ_SHEET_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?sheet=Negocios&tqx=out:json`;
     
-    // Substitua pelo link real do seu Google Forms criado no Passo 1
-    const GOOGLE_FORM_URL = 'https://forms.gle/SEU_LINK_DO_GOOGLE_FORMS_AQUI';
+    // Link do formulário fornecido
+    const GOOGLE_FORM_URL = 'https://forms.gle/reSPVKvJZi4mK2Yk9';
 
     // --- CONFIGURAÇÃO DO PIX DE DOAÇÃO ---
     const CHAVE_PIX_RECEPTOR = "matheuzzu@hotmail.com";
@@ -649,7 +649,7 @@
     function renderRatingHtml(rating, count) {
         const score = parseFloat(rating) || 0;
         const total = parseInt(count) || 0;
-        const percentage = (score / 5) * 100;
+        const percentage = Math.min(Math.max((score / 5) * 100, 0), 100);
 
         return `
             <div class="rating-container">
@@ -716,7 +716,7 @@
                     Imagem: row.c[8] ? row.c[8].v : '',
                     Local: row.c[9] ? row.c[9].v : '',
                     PalavrasChave: row.c[10] ? row.c[10].v : '',
-                    // Ajuste os índices N (13) e O (14) conforme posicionar na sua planilha
+                    // Coluna N (índice 13) = Média / Coluna O (índice 14) = Total
                     MediaAvaliacoes: row.c[13] ? (row.c[13].v || 0) : 0,
                     TotalAvaliacoes: row.c[14] ? (row.c[14].v || 0) : 0,
                     IsActive: isActive
@@ -954,7 +954,7 @@
         const inputElement = document.getElementById('inputValorDoacao');
         let rawDigits = inputElement.value.replace(/\D/g, "");
         
-        if (!rawDigits, rawDigits.length === 0) {
+        if (!rawDigits) {
             alert('Por favor, informe um valor de doação válido.');
             return;
         }
