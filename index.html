@@ -831,7 +831,8 @@
                     timestamp: row.c[0] ? (row.c[0].f || row.c[0].v) : '',
                     empresa: row.c[1] ? String(row.c[1].v).trim() : '',
                     nota: row.c[2] ? parseFloat(row.c[2].v) || 0 : 0,
-                    comentario: row.c[3] ? row.c[3].v : 'Sem comentário.'
+                    comentario: row.c[3] ? row.c[3].v : 'Sem comentário.',
+                    nomeAvaliador: row.c[4] ? String(row.c[4].v).trim() : 'Anônimo'
                 };
             }).filter(r => r && r.empresa);
         } catch (error) {
@@ -898,7 +899,10 @@
                 item.className = 'review-item';
                 item.innerHTML = `
                     <div class="review-header">
-                        <div class="review-stars">${starsStr} (${rev.nota.toFixed(1)})</div>
+                        <div style="display: flex; align-items: center; gap: 6px;">
+                            <span style="font-weight: 700; font-size: 0.8rem; color: var(--text);">${rev.nomeAvaliador}</span>
+                            <div class="review-stars">${starsStr} (${rev.nota.toFixed(1)})</div>
+                        </div>
                         <div class="review-date">${rev.timestamp}</div>
                     </div>
                     <div class="review-comment">"${rev.comentario}"</div>
