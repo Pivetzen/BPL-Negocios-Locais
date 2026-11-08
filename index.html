@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Negócios Locais</title>
+    <title>🛍 Negócios Locais</title>
     
     <!-- FAVICON COM A IMAGEM DO PIXABAY -->
     <link rel="icon" type="image/png" href="https://cdn.pixabay.com/photo/2017/10/06/20/37/feedback-2824577_1280.png">
@@ -547,8 +547,8 @@
             width: 100%;
             background-color: #f1f5f9;
             border-top: 1px solid #cbd5e1;
-            padding: 10px 12px;
-            padding-bottom: calc(10px + env(safe-area-inset-bottom, 12px));
+            padding: 8px 12px;
+            padding-bottom: calc(8px + env(safe-area-inset-bottom, 8px));
             text-align: center;
             font-size: 0.75rem;
             color: #475569;
@@ -561,7 +561,7 @@
             margin: 0 auto 4px auto;
             padding: 8px 12px;
             background: #ffffff;
-            border-radius: 10px;
+            border-radius: 12px;
             box-shadow: 0 1px 3px rgba(0,0,0,0.05);
             border: 1px solid #cbd5e1;
         }
@@ -569,32 +569,27 @@
         .donation-title {
             font-weight: 600;
             color: #1e293b;
-            margin-bottom: 2px;
+            margin-bottom: 4px;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 6px;
-            font-size: 0.8rem;
-        }
-
-        .donation-subtitle {
-            font-size: 0.7rem;
-            color: #64748b;
-            margin-bottom: 6px;
+            gap: 4px;
+            font-size: 0.75rem;
         }
 
         .donation-controls {
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 8px;
+            margin-bottom: 8px;
         }
 
         .donation-input {
             width: 100%;
             border: 1px solid #cbd5e1;
-            border-radius: 6px;
-            padding: 5px 8px;
-            font-size: 0.85rem;
+            border-radius: 8px;
+            padding: 6px 12px;
+            font-size: 0.75rem;
             font-weight: 600;
             color: #1e293b;
             text-align: center;
@@ -602,34 +597,92 @@
         }
 
         .donation-input:focus {
-            border-color: #10b981;
-            box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.2);
+            border-color: #059669;
+            box-shadow: 0 0 0 2px rgba(5, 150, 105, 0.2);
         }
 
         .btn-pix {
             background-color: #059669;
             color: white;
-            font-weight: 600;
+            font-weight: 500;
             padding: 6px 12px;
-            border-radius: 6px;
+            border-radius: 8px;
             border: none;
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             cursor: pointer;
             transition: background-color 0.2s;
             display: flex;
             align-items: center;
             gap: 4px;
             white-space: nowrap;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
         }
 
         .btn-pix:hover { background-color: #047857; }
 
         .pix-success-msg {
-            font-size: 0.7rem;
+            font-size: 0.625rem;
             color: #059669;
             font-weight: 600;
-            margin-top: 4px;
+            margin-bottom: 8px;
             display: none;
+        }
+
+        /* DIVISOR E CARTEIRAS DIGITAIS (INFINITEPAY) */
+        .infinitepay-divider {
+            border-top: 1px solid #e2e8f0;
+            margin-top: 6px;
+            padding-top: 6px;
+        }
+
+        .infinitepay-text {
+            font-size: 0.625rem;
+            color: #94a3b8;
+            margin-bottom: 4px;
+        }
+
+        .infinitepay-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 6px;
+            width: 100%;
+        }
+
+        .btn-infinitepay {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 6px 4px;
+            background-color: #00D632;
+            color: #000000;
+            font-weight: 600;
+            border-radius: 8px;
+            text-decoration: none;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+            transition: transform 0.1s;
+        }
+
+        .btn-infinitepay:hover {
+            background-color: #00B82B;
+        }
+
+        .btn-infinitepay:active {
+            transform: scale(0.95);
+        }
+
+        .btn-infinitepay .label-doar {
+            font-size: 0.5625rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            opacity: 0.8;
+            line-height: 1;
+        }
+
+        .btn-infinitepay .label-valor {
+            font-size: 0.75rem;
+            font-weight: 800;
+            margin-top: 2px;
         }
     </style>
 </head>
@@ -678,19 +731,44 @@
                 <p class="donation-title">
                     <i class="fa-solid fa-heart" style="color: #ef4444;"></i> Gostou do app? Apoie o projeto!
                 </p>
-                <p class="donation-subtitle">Sua doação ajuda a manter a ferramenta online.</p>
                 
+                <!-- Opção 1: Pix Personalizado (Digitar Valor) -->
                 <div class="donation-controls">
-                    <input type="text" id="inputValorDoacao" value="Digite um valor..." oninput="mascaraMoeda(this)" class="donation-input">
+                    <input type="text" id="inputValorDoacao" value="Digite um valor..." inputmode="decimal" pattern="[0-9]*" oninput="mascaraMoeda(this)" class="donation-input">
                     <button onclick="gerarECopiarPixDoacao()" class="btn-pix">
                         <i class="fa-regular fa-copy"></i> Copiar Pix
                     </button>
                 </div>
                 <p id="msgSucessoPix" class="pix-success-msg">
-                    <i class="fa-solid fa-check-circle"></i> Código Copia e Cola gravado! Abra seu banco para pagar.
+                    <i class="fa-solid fa-check-circle"></i> Código Pix Copia e Cola copiado! Abra seu banco para pagar.
                 </p>
+
+                <!-- Divisor sutil e Opção 2: InfinitePay -->
+                <div class="infinitepay-divider">
+                    <p class="infinitepay-text">Ou escolha um valor via Cartão / Pix (InfinitePay):</p>
+                    
+                    <div class="infinitepay-grid">
+                        <a href="https://link.infinitepay.io/matheusmaia_32/VC1BLUEtSQ-sTlL5IePTQ-10,00" target="_blank" rel="noopener noreferrer" class="btn-infinitepay">
+                            <span class="label-doar">Doar</span>
+                            <span class="label-valor">R$ 10</span>
+                        </a>
+                        <a href="https://link.infinitepay.io/matheusmaia_32/VC1DLUMtSQ-xL8lVxgLO0-50,00" target="_blank" rel="noopener noreferrer" class="btn-infinitepay">
+                            <span class="label-doar">Doar</span>
+                            <span class="label-valor">R$ 50</span>
+                        </a>
+                        <a href="https://link.infinitepay.io/matheusmaia_32/VC1DLUMtSQ-7uZQXCY1fs-100,00" target="_blank" rel="noopener noreferrer" class="btn-infinitepay">
+                            <span class="label-doar">Doar</span>
+                            <span class="label-valor">R$ 100</span>
+                        </a>
+                        <a href="https://link.infinitepay.io/matheusmaia_32/VC1DLUMtSQ-FoXoBv2yil-200,00" target="_blank" rel="noopener noreferrer" class="btn-infinitepay">
+                            <span class="label-doar">Doar</span>
+                            <span class="label-valor">R$ 200</span>
+                        </a>
+                    </div>
+                </div>
             </div>
-            <p style="font-size: 0.65rem; color: #94a3b8;">BPL - Negócios Locais @ 2026</p>
+
+            <p style="font-size: 0.625rem; color: #94a3b8; margin-top: 4px;">BPL - Negócios Locais © 2026 - Todos os direitos reservados</p>
         </footer>
     </div>
 
@@ -1102,7 +1180,7 @@
     function mascaraMoeda(input) {
         let value = input.value.replace(/\D/g, "");
         if (!value || value === "00") {
-            input.value = "R$ 0,00";
+            input.value = "Digite um valor...";
             return;
         }
         let numberValue = (parseInt(value, 10) / 100).toFixed(2);
@@ -1153,7 +1231,7 @@
         const inputElement = document.getElementById('inputValorDoacao');
         let rawDigits = inputElement.value.replace(/\D/g, "");
         
-        if (!rawDigits) {
+        if (!rawDigits || rawDigits === "00") {
             alert('Por favor, informe um valor de doação válido.');
             return;
         }
