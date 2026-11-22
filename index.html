@@ -5,7 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>🛍 Negócios Locais</title>
     
-    <!-- FAVICON -->
+    <!-- PWA / MANIFEST & ÍCONES -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#2563eb">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="BPL Local">
+    <link rel="apple-touch-icon" href="https://cdn.pixabay.com/photo/2017/10/06/20/37/feedback-2824577_1280.png">
     <link rel="icon" type="image/png" href="https://cdn.pixabay.com/photo/2017/10/06/20/37/feedback-2824577_1280.png">
 
     <!-- Ícones FontAwesome -->
@@ -86,6 +92,14 @@
             margin-bottom: 12px;
         }
 
+        .header-actions {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+        }
+
         /* --- BOTÃO DE CADASTRAR EMPRESA --- */
         .btn-register {
             display: inline-flex;
@@ -107,6 +121,30 @@
             transform: translateY(-2px);
             box-shadow: 0 6px 14px rgba(37, 99, 235, 0.35);
             background: linear-gradient(135deg, #1d4ed8 0%, #1e40af 100%);
+        }
+
+        /* --- BOTÃO SALVAR NA TELA INICIAL --- */
+        .btn-install-guide {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            background-color: #ffffff;
+            color: var(--primary);
+            border: 1.5px solid #bfdbfe;
+            font-size: 0.82rem;
+            font-weight: 700;
+            padding: 9px 15px;
+            border-radius: 25px;
+            cursor: pointer;
+            box-shadow: 0 2px 6px rgba(37, 99, 235, 0.08);
+            transition: all 0.2s;
+        }
+
+        .btn-install-guide:hover {
+            background-color: #eff6ff;
+            border-color: var(--primary);
+            transform: translateY(-1px);
         }
 
         /* --- SISTEMA DE AVALIAÇÃO (ESTRELAS) --- */
@@ -162,7 +200,7 @@
             color: var(--primary-hover);
         }
 
-        /* --- MODAIS (AVALIAÇÕES E DOAÇÃO) --- */
+        /* --- MODAIS (AVALIAÇÕES, DOAÇÃO E INSTALAÇÃO) --- */
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -271,6 +309,60 @@
             margin-top: 2px;
         }
 
+        /* --- GUIA DE INSTALAÇÃO (ANDROID & IOS) --- */
+        .install-os-box {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 12px;
+        }
+
+        .install-os-title {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .install-steps {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            font-size: 0.8rem;
+            color: #334155;
+        }
+
+        .install-steps li {
+            display: flex;
+            align-items: flex-start;
+            gap: 6px;
+            line-height: 1.35;
+        }
+
+        .btn-native-install {
+            width: 100%;
+            background: var(--primary);
+            color: #ffffff;
+            border: none;
+            border-radius: 8px;
+            padding: 10px 14px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            cursor: pointer;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-native-install:hover {
+            background: var(--primary-hover);
+        }
+
         /* --- CARD DE DESTAQUE --- */
         .featured-container {
             width: 100%;
@@ -345,7 +437,7 @@
             min-width: 0;
         }
 
-        /* --- FILTROS DE BUSCA --- */
+        /* --- FILTROS DE BUSCA & INTERRUPTOR --- */
         .search-container {
             width: 100%;
             max-width: 1100px;
@@ -355,8 +447,15 @@
             margin-bottom: 16px;
         }
 
+        .search-row-top {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            width: 100%;
+        }
+
         @media (min-width: 640px) { 
-            .search-container { flex-direction: row; align-items: center; } 
+            .search-row-top { flex-direction: row; align-items: center; } 
         }
 
         .search-input, .filter-select {
@@ -372,27 +471,53 @@
 
         .search-input:focus, .filter-select:focus { border-color: var(--primary); }
 
-        .btn-building-filter {
+        /* Interruptor de dois estados ("Ver todos" / "Apenas do prédio") */
+        .scope-switch-wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background-color: #e2e8f0;
+            padding: 3px;
+            border-radius: 10px;
+            gap: 4px;
+            width: 100%;
+        }
+
+        @media (min-width: 640px) {
+            .scope-switch-wrapper {
+                width: auto;
+                min-width: 270px;
+            }
+        }
+
+        .scope-option {
+            flex: 1;
+            border: none;
+            background: transparent;
+            color: #475569;
+            font-size: 0.78rem;
+            font-weight: 700;
+            padding: 7px 12px;
+            border-radius: 8px;
+            cursor: pointer;
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            gap: 6px;
-            padding: 10px 14px;
-            font-size: 0.82rem;
-            font-weight: 700;
-            border-radius: 8px;
-            border: 1px solid #f59e0b;
-            background-color: #fffbeb;
-            color: #b45309;
-            cursor: pointer;
+            gap: 5px;
             white-space: nowrap;
-            transition: all 0.2s;
+            transition: all 0.2s ease;
         }
 
-        .btn-building-filter.active {
+        .scope-option.active-all {
+            background-color: #ffffff;
+            color: var(--primary);
+            box-shadow: 0 1px 4px rgba(0,0,0,0.12);
+        }
+
+        .scope-option.active-building {
             background-color: #f59e0b;
             color: #ffffff;
-            box-shadow: 0 2px 6px rgba(245, 158, 11, 0.3);
+            box-shadow: 0 2px 6px rgba(245, 158, 11, 0.35);
         }
 
         /* --- GRID DOS CARDS DO CATÁLOGO --- */
@@ -730,13 +855,20 @@
             <header>
                 <h1>BPL - Negócios Locais</h1>
                 <p>Encontre e recomende os melhores serviços da região</p>
-                <!-- BOTÃO PARA CADASTRAR EMPRESA -->
-                <a href="https://wa.me/5585987804628?text=Ol%C3%A1!%20Gostaria%20de%20saber%20os%20planos%20para%20cadastrar%20minha%20empresa%20no%20aplicativo%20BPL%20-%20Neg%C3%B3cios%20Locais." 
-                   target="_blank" 
-                   rel="noopener" 
-                   class="btn-register">
-                   <i class="fa-solid fa-plus-circle"></i> Divulgar minha empresa
-                </a>
+                <div class="header-actions">
+                    <!-- BOTÃO PARA CADASTRAR EMPRESA -->
+                    <a href="https://wa.me/5585987804628?text=Ol%C3%A1!%20Gostaria%20de%20saber%20os%20planos%20para%20cadastrar%20minha%20empresa%20no%20aplicativo%20BPL%20-%20Neg%C3%B3cios%20Locais." 
+                       target="_blank" 
+                       rel="noopener" 
+                       class="btn-register">
+                       <i class="fa-solid fa-plus-circle"></i> Divulgar minha empresa
+                    </a>
+
+                    <!-- BOTÃO PARA ORIENTAR COMO SALVAR NA TELA INICIAL -->
+                    <button type="button" class="btn-install-guide" onclick="abrirModalInstalacao()">
+                        <i class="fa-solid fa-mobile-screen-button"></i> Salvar na tela inicial
+                    </button>
+                </div>
             </header>
 
             <!-- Container do Negócio em Destaque -->
@@ -747,15 +879,24 @@
                 </div>
             </div>
 
-            <!-- Filtros de Busca -->
+            <!-- Filtros de Busca e Interruptor de Escopo -->
             <div class="search-container">
-                <input type="text" id="searchInput" class="search-input" placeholder="Buscar por nome, serviço ou palavra-chave...">
-                <select id="categoryFilter" class="filter-select">
-                    <option value="todos">Todos os ramos/categorias</option>
-                </select>
-                <button type="button" id="btnBuildingFilter" class="btn-building-filter" onclick="toggleBuildingFilter()">
-                    <i class="fa-solid fa-building"></i> Do Prédio
-                </button>
+                <div class="search-row-top">
+                    <input type="text" id="searchInput" class="search-input" placeholder="Buscar por nome, serviço ou palavra-chave...">
+                    <select id="categoryFilter" class="filter-select">
+                        <option value="todos">Todos os ramos/categorias</option>
+                    </select>
+                </div>
+
+                <!-- Interruptor: Ver todos / Apenas do prédio -->
+                <div class="scope-switch-wrapper" role="group" aria-label="Filtrar abrangência dos negócios">
+                    <button type="button" id="optAll" class="scope-option active-all" onclick="setScopeFilter('all')">
+                        <i class="fa-solid fa-globe"></i> Ver todos
+                    </button>
+                    <button type="button" id="optBuilding" class="scope-option" onclick="setScopeFilter('building')">
+                        <i class="fa-solid fa-building"></i> Apenas do prédio
+                    </button>
+                </div>
             </div>
 
             <!-- Lista de Negócios -->
@@ -781,6 +922,52 @@
                 <button class="modal-close" onclick="fecharModalReviewsDirect()"><i class="fa-solid fa-xmark"></i></button>
             </div>
             <div class="modal-body" id="modalReviewsList"></div>
+        </div>
+    </div>
+
+    <!-- MODAL COMO SALVAR NA TELA INICIAL (ANDROID & IOS) -->
+    <div id="installModal" class="modal-overlay" onclick="fecharModalInstalacao(event)">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <div class="modal-header">
+                <div class="modal-title">
+                    <i class="fa-solid fa-mobile-screen-button" style="color: var(--primary);"></i> Salvar na tela inicial
+                </div>
+                <button class="modal-close" onclick="fecharModalInstalacaoDirect()"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-body">
+                <p style="font-size: 0.8rem; color: var(--text-light); text-align: center;">
+                    Tenha o <strong>BPL - Negócios Locais</strong> sempre à mão como um aplicativo, sem precisar baixar nada da loja.
+                </p>
+
+                <!-- Botão nativo quando o navegador suportar beforeinstallprompt -->
+                <button type="button" id="btnNativeInstall" class="btn-native-install" onclick="dispararInstalacaoNativa()">
+                    <i class="fa-solid fa-download"></i> Instalar aplicativo agora
+                </button>
+
+                <!-- Instruções iPhone / iPad -->
+                <div class="install-os-box">
+                    <div class="install-os-title">
+                        <i class="fa-brands fa-apple" style="font-size: 1rem;"></i> No iPhone / iPad (Safari)
+                    </div>
+                    <ol class="install-steps">
+                        <li><strong>1.</strong> Toque no botão de <strong>Compartilhar</strong> (o quadrado com uma seta para cima <i class="fa-solid fa-arrow-up-from-bracket"></i>).</li>
+                        <li><strong>2.</strong> Role para baixo e toque em <strong>"Adicionar à Tela de Início"</strong>.</li>
+                        <li><strong>3.</strong> Confirme em <strong>"Adicionar"</strong> no canto superior direito.</li>
+                    </ol>
+                </div>
+
+                <!-- Instruções Android -->
+                <div class="install-os-box">
+                    <div class="install-os-title">
+                        <i class="fa-brands fa-android" style="color: #16a34a; font-size: 1rem;"></i> No Android (Chrome)
+                    </div>
+                    <ol class="install-steps">
+                        <li><strong>1.</strong> Toque no menu de <strong>três pontos</strong> (<i class="fa-solid fa-ellipsis-vertical"></i>) no canto superior direito.</li>
+                        <li><strong>2.</strong> Toque em <strong>"Adicionar à tela inicial"</strong> ou <strong>"Instalar aplicativo"</strong>.</li>
+                        <li><strong>3.</strong> Confirme em <strong>"Instalar"</strong> ou <strong>"Adicionar"</strong>.</li>
+                    </ol>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -845,6 +1032,25 @@
         event.preventDefault();
     });
 
+    // --- CAPTURA DO PROMPT NATIVO DE INSTALAÇÃO (PWA) ---
+    let deferredInstallPrompt = null;
+    window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault();
+        deferredInstallPrompt = e;
+        const nativeBtn = document.getElementById('btnNativeInstall');
+        if (nativeBtn) nativeBtn.style.display = 'inline-flex';
+    });
+
+    async function dispararInstalacaoNativa() {
+        if (!deferredInstallPrompt) return;
+        deferredInstallPrompt.prompt();
+        await deferredInstallPrompt.userChoice;
+        deferredInstallPrompt = null;
+        const nativeBtn = document.getElementById('btnNativeInstall');
+        if (nativeBtn) nativeBtn.style.display = 'none';
+        fecharModalInstalacaoDirect();
+    }
+
     const SHEET_ID = '1xHCYeMoeJf0_TItdUivSCH_nTe-2wh5Z0FP9QX0Ok5U';
     const BIZ_SHEET_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?sheet=Negocios&tqx=out:json`;
     const REVIEWS_SHEET_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?sheet=Avaliacoes&tqx=out:json`;
@@ -859,7 +1065,7 @@
     let businesses = [];
     let allReviews = [];
     let randomFeaturedBusiness = null;
-    let onlyBuilding = false;
+    let scopeMode = 'all'; // 'all' ou 'building'
 
     async function init() {
         await Promise.all([fetchBusinesses(), fetchReviews()]);
@@ -972,6 +1178,18 @@
         if (event.target.id === 'reviewsModal') fecharModalReviewsDirect();
     }
 
+    function abrirModalInstalacao() {
+        document.getElementById('installModal').classList.add('active');
+    }
+
+    function fecharModalInstalacaoDirect() {
+        document.getElementById('installModal').classList.remove('active');
+    }
+
+    function fecharModalInstalacao(event) {
+        if (event.target.id === 'installModal') fecharModalInstalacaoDirect();
+    }
+
     function abrirModalDoacao() {
         document.getElementById('donateModal').classList.add('active');
     }
@@ -1080,11 +1298,14 @@
         } catch (error) { console.error("Erro na carga de negócios:", error); }
     }
 
-    function toggleBuildingFilter() {
-        onlyBuilding = !onlyBuilding;
-        const btn = document.getElementById('btnBuildingFilter');
-        if (btn) {
-            btn.classList.toggle('active', onlyBuilding);
+    function setScopeFilter(mode) {
+        scopeMode = mode;
+        const optAll = document.getElementById('optAll');
+        const optBuilding = document.getElementById('optBuilding');
+
+        if (optAll && optBuilding) {
+            optAll.classList.toggle('active-all', mode === 'all');
+            optBuilding.classList.toggle('active-building', mode === 'building');
         }
         renderBusinesses();
     }
@@ -1182,7 +1403,7 @@
 
         let filtered = businesses.filter(b => {
             const matchesCategory = selectedCategory === 'todos' || b.Categoria === selectedCategory;
-            const matchesBuilding = !onlyBuilding || (b.Local && b.Local.toUpperCase() === "DO PRÉDIO");
+            const matchesBuilding = scopeMode !== 'building' || (b.Local && b.Local.toUpperCase() === "DO PRÉDIO");
             
             const nameMatch = b.Nome ? b.Nome.toLowerCase().includes(searchTerm) : false;
             const descMatch = b.Descricao ? b.Descricao.toLowerCase().includes(searchTerm) : false;
