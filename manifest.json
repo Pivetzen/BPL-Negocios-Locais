@@ -1,0 +1,25 @@
+{
+  "name": "BPL - Negócios Locais",
+  "short_name": "BPL Local",
+  "description": "Encontre e recomende os melhores serviços da região e do condomínio.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#f8fafc",
+  "theme_color": "#2563eb",
+  "icons": [
+    {
+      "src": "https://cdn.pixabay.com/photo/2017/10/06/20/37/feedback-2824577_1280.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "https://cdn.pixabay.com/photo/2017/10/06/20/37/feedback-2824577_1280.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
