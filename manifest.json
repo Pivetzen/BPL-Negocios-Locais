@@ -1,6 +1,6 @@
 {
   "name": "BPL - Negócios Locais",
-  "short_name": "BPL Local",
+  "short_name": "BPL - Negócios Locais",
   "description": "Encontre e recomende os melhores serviços da região e do condomínio.",
   "start_url": "./",
   "scope": "./",
