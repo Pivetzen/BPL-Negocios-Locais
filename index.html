@@ -200,7 +200,7 @@
             color: var(--primary-hover);
         }
 
-        /* --- MODAIS (AVALIAÇÕES, DOAÇÃO E INSTALAÇÃO) --- */
+        /* --- MODAIS (AVALIAÇÕES, DOAÇÃO, INSTALAÇÃO E RAIO-X) --- */
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -234,6 +234,10 @@
             max-height: 85vh;
             overflow: hidden;
             animation: modalScale 0.2s ease;
+        }
+
+        .modal-content.modal-lg {
+            max-width: 560px;
         }
 
         @keyframes modalScale {
@@ -307,6 +311,123 @@
             color: var(--text);
             word-break: break-word;
             margin-top: 2px;
+        }
+
+        /* --- ESTILOS DO MODAL RAIO-X ADMIN --- */
+        .admin-auth-box {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .admin-input {
+            width: 100%;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            padding: 9px 12px;
+            font-size: 0.85rem;
+            color: var(--text);
+            outline: none;
+        }
+
+        .admin-input:focus {
+            border-color: var(--primary);
+        }
+
+        .btn-admin-primary {
+            background-color: var(--primary);
+            color: #ffffff;
+            border: none;
+            border-radius: 8px;
+            padding: 9px 14px;
+            font-size: 0.82rem;
+            font-weight: 700;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .btn-admin-primary:hover {
+            background-color: var(--primary-hover);
+        }
+
+        .btn-admin-secondary {
+            background-color: #f1f5f9;
+            color: var(--text);
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            padding: 7px 12px;
+            font-size: 0.78rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .btn-admin-secondary:hover {
+            background-color: #e2e8f0;
+        }
+
+        .admin-filters-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 8px;
+        }
+
+        @media (min-width: 520px) {
+            .admin-filters-grid {
+                grid-template-columns: 1.4fr 1fr 1fr;
+            }
+        }
+
+        .admin-summary-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
+        }
+
+        .admin-stat-card {
+            background: #eff6ff;
+            border: 1px solid #bfdbfe;
+            border-radius: 8px;
+            padding: 8px 10px;
+        }
+
+        .admin-stat-label {
+            font-size: 0.68rem;
+            color: var(--text-light);
+            text-transform: uppercase;
+            font-weight: 700;
+        }
+
+        .admin-stat-value {
+            font-size: 1rem;
+            font-weight: 800;
+            color: var(--primary);
+            margin-top: 2px;
+        }
+
+        .admin-report-line {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 8px 10px;
+            font-size: 0.8rem;
+            color: var(--text);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .admin-error-msg {
+            font-size: 0.78rem;
+            color: #dc2626;
+            font-weight: 600;
         }
 
         /* --- GUIA DE INSTALAÇÃO (ANDROID & IOS) --- */
@@ -701,7 +822,7 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            gap: 10px;
+            gap: 8px;
             box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.06);
             z-index: 9999;
         }
@@ -713,6 +834,32 @@
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
+        }
+
+        .footer-actions {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            flex-shrink: 0;
+        }
+
+        .btn-open-admin {
+            background-color: #f1f5f9;
+            color: #334155;
+            border: 1px solid #cbd5e1;
+            padding: 6px 10px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.15s;
+        }
+
+        .btn-open-admin:hover {
+            background-color: #e2e8f0;
         }
 
         .btn-open-donate {
@@ -906,10 +1053,86 @@
         <!-- RODAPÉ COMPACTO FIXO -->
         <footer class="compact-footer">
             <span class="footer-brand">BPL - Negócios Locais © 2026</span>
-            <button type="button" class="btn-open-donate" onclick="abrirModalDoacao()">
-                <i class="fa-solid fa-heart"></i> Apoiar o app
-            </button>
+            <div class="footer-actions">
+                <button type="button" class="btn-open-admin" onclick="abrirModalAdmin()" title="Raio-X de cliques (Admin)">
+                    📊
+                </button>
+                <button type="button" class="btn-open-donate" onclick="abrirModalDoacao()">
+                    <i class="fa-solid fa-heart"></i> Apoiar o app
+                </button>
+            </div>
         </footer>
+    </div>
+
+    <!-- MODAL RAIO-X DE CLIQUES (ADMIN) -->
+    <div id="adminModal" class="modal-overlay" onclick="fecharModalAdmin(event)">
+        <div class="modal-content modal-lg" onclick="event.stopPropagation()">
+            <div class="modal-header">
+                <div class="modal-title">📊 Raio-X de Cliques (Admin)</div>
+                <button class="modal-close" onclick="fecharModalAdminDirect()"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-body">
+                <!-- Etapa 1: Senha -->
+                <div id="adminAuthBox" class="admin-auth-box">
+                    <p style="font-size: 0.8rem; color: var(--text-light);">
+                        Digite a senha de administrador para consultar o relatório de cliques nos botões.
+                    </p>
+                    <input type="password" id="adminPasswordInput" class="admin-input" placeholder="Senha do administrador" onkeydown="if(event.key==='Enter') autenticarRaioX()">
+                    <button type="button" id="btnAdminLogin" class="btn-admin-primary" onclick="autenticarRaioX()">
+                        <i class="fa-solid fa-lock-open"></i> Acessar Raio-X
+                    </button>
+                    <div id="adminAuthError" class="admin-error-msg"></div>
+                </div>
+
+                <!-- Etapa 2: Painel de Filtros e Relatório -->
+                <div id="adminPanelBox" style="display: none; flex-direction: column; gap: 12px;">
+                    <div class="admin-filters-grid">
+                        <select id="filtroEmpresa" class="filter-select" onchange="renderizarRelatorioRaioX()">
+                            <option value="todas">Todas as empresas</option>
+                        </select>
+                        <select id="filtroBotao" class="filter-select" onchange="renderizarRelatorioRaioX()">
+                            <option value="todos">Todos os botões</option>
+                            <option value="whatsapp">Whats</option>
+                            <option value="insta">Insta</option>
+                            <option value="site">Site</option>
+                            <option value="indicar">Indicar</option>
+                            <option value="avaliar">Avaliar</option>
+                        </select>
+                        <select id="filtroPeriodo" class="filter-select" onchange="renderizarRelatorioRaioX()">
+                            <option value="30">Últimos 30 dias</option>
+                            <option value="7">Últimos 7 dias</option>
+                            <option value="1">Hoje</option>
+                            <option value="tudo">Todo o período</option>
+                        </select>
+                    </div>
+
+                    <div class="admin-summary-grid">
+                        <div class="admin-stat-card">
+                            <div class="admin-stat-label">Cliques no filtro</div>
+                            <div class="admin-stat-value" id="adminTotalClicks">0</div>
+                        </div>
+                        <div class="admin-stat-card">
+                            <div class="admin-stat-label">Linhas no relatório</div>
+                            <div class="admin-stat-value" id="adminTotalLines">0</div>
+                        </div>
+                    </div>
+
+                    <div style="display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap;">
+                        <button type="button" class="btn-admin-secondary" onclick="carregarDadosRaioX(adminPasswordCache)">
+                            <i class="fa-solid fa-rotate"></i> Atualizar
+                        </button>
+                        <button type="button" class="btn-admin-secondary" onclick="copiarRelatorioRaioX()">
+                            <i class="fa-regular fa-copy"></i> Copiar relatório
+                        </button>
+                    </div>
+                    <div id="adminCopyFeedback" style="font-size: 0.72rem; color: var(--success); font-weight: 600; display: none;">
+                        Relatório copiado para a área de transferência!
+                    </div>
+
+                    <div id="listaRelatorioCliques" style="display: flex; flex-direction: column; gap: 6px;"></div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- MODAL DE AVALIAÇÕES -->
@@ -1052,7 +1275,10 @@
     const SHEET_ID = '1xHCYeMoeJf0_TItdUivSCH_nTe-2wh5Z0FP9QX0Ok5U';
     const BIZ_SHEET_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?sheet=Negocios&tqx=out:json`;
     const REVIEWS_SHEET_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?sheet=Avaliacoes&tqx=out:json`;
-    
+
+    // Cole aqui a URL do seu Aplicativo da Web do Google Apps Script
+    const TRACKER_URL = 'COLE_AQUI_SUA_URL_DO_APPS_SCRIPT';
+
     const GOOGLE_FORM_URL = 'https://forms.gle/reSPVKvJZi4mK2Yk9';
 
     // --- CONFIGURAÇÃO DO PIX DE DOAÇÃO ---
@@ -1065,8 +1291,46 @@
     let randomFeaturedBusiness = null;
     let scopeMode = 'all'; // 'all' ou 'building'
 
+    // Estado do Raio-X Admin
+    let adminClicksData = [];
+    let adminPasswordCache = '';
+    let currentReportText = '';
+
     async function init() {
         await Promise.all([fetchBusinesses(), fetchReviews()]);
+    }
+
+    function registrarClique(biz, botao, origem = 'catalogo') {
+        if (!TRACKER_URL || TRACKER_URL.startsWith('COLE_AQUI')) return;
+
+        const body = JSON.stringify({
+            action: 'trackClick',
+            negId: biz && biz.id ? biz.id : '',
+            empresa: biz && biz.Nome ? biz.Nome : '',
+            botao: botao,
+            origem: origem
+        });
+
+        fetch(TRACKER_URL, {
+            method: 'POST',
+            mode: 'no-cors',
+            keepalive: true,
+            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+            body: body
+        }).catch(() => {});
+    }
+
+    function escapeJsSingleQuote(str) {
+        return String(str || '').replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+    }
+
+    function handleCardClickById(bizId, bizName, botao, origem) {
+        const found = businesses.find(b =>
+            (bizId && String(b.id) === String(bizId)) ||
+            (bizName && String(b.Nome) === String(bizName))
+        ) || { id: bizId || '', Nome: bizName || '' };
+
+        registrarClique(found, botao, origem);
     }
 
     async function fetchReviews() {
@@ -1131,7 +1395,161 @@
         return `https://api.whatsapp.com/send?text=${encodeURIComponent(msg)}`;
     }
 
-    // --- CONTROLE DOS MODAIS ---
+    // --- CONTROLE DO MODAL RAIO-X ADMIN ---
+    function abrirModalAdmin() {
+        document.getElementById('adminModal').classList.add('active');
+        if (!adminPasswordCache) {
+            const input = document.getElementById('adminPasswordInput');
+            if (input) setTimeout(() => input.focus(), 100);
+        }
+    }
+
+    function fecharModalAdminDirect() {
+        document.getElementById('adminModal').classList.remove('active');
+    }
+
+    function fecharModalAdmin(event) {
+        if (event.target.id === 'adminModal') fecharModalAdminDirect();
+    }
+
+    async function autenticarRaioX() {
+        const input = document.getElementById('adminPasswordInput');
+        const errEl = document.getElementById('adminAuthError');
+        const btn = document.getElementById('btnAdminLogin');
+        const senha = input ? input.value.trim() : '';
+
+        errEl.textContent = '';
+        if (!senha) {
+            errEl.textContent = 'Informe a senha.';
+            return;
+        }
+        if (!TRACKER_URL || TRACKER_URL.startsWith('COLE_AQUI')) {
+            errEl.textContent = 'Configure a constante TRACKER_URL no código antes de consultar.';
+            return;
+        }
+
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Verificando...';
+
+        try {
+            await carregarDadosRaioX(senha);
+            document.getElementById('adminAuthBox').style.display = 'none';
+            document.getElementById('adminPanelBox').style.display = 'flex';
+        } catch (err) {
+            errEl.textContent = err.message || 'Não foi possível autenticar.';
+        } finally {
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fa-solid fa-lock-open"></i> Acessar Raio-X';
+        }
+    }
+
+    async function carregarDadosRaioX(senha) {
+        const url = `${TRACKER_URL}?pass=${encodeURIComponent(senha)}`;
+        const res = await fetch(url);
+        const json = await res.json();
+        if (!json.ok) {
+            throw new Error(json.error || 'Senha inválida');
+        }
+        adminPasswordCache = senha;
+        adminClicksData = Array.isArray(json.data) ? json.data : [];
+        preencherFiltroEmpresasRaioX();
+        renderizarRelatorioRaioX();
+    }
+
+    function preencherFiltroEmpresasRaioX() {
+        const select = document.getElementById('filtroEmpresa');
+        if (!select) return;
+        const valorAtual = select.value;
+
+        const empresas = [...new Set(adminClicksData.map(item => item.empresa).filter(Boolean))]
+            .sort((a, b) => a.localeCompare(b));
+
+        select.innerHTML = '<option value="todas">Todas as empresas</option>';
+        empresas.forEach(emp => {
+            const opt = document.createElement('option');
+            opt.value = emp;
+            opt.textContent = emp;
+            select.appendChild(opt);
+        });
+
+        if (empresas.includes(valorAtual)) {
+            select.value = valorAtual;
+        }
+    }
+
+    function renderizarRelatorioRaioX() {
+        const empFiltro = document.getElementById('filtroEmpresa')?.value || 'todas';
+        const btnFiltro = document.getElementById('filtroBotao')?.value || 'todos';
+        const periodoFiltro = document.getElementById('filtroPeriodo')?.value || '30';
+
+        const agora = new Date();
+        let limiteData = null;
+
+        if (periodoFiltro === '1') {
+            limiteData = new Date(agora.getFullYear(), agora.getMonth(), agora.getDate(), 0, 0, 0, 0);
+        } else if (periodoFiltro !== 'tudo') {
+            const dias = Number(periodoFiltro) || 30;
+            limiteData = new Date(agora.getTime() - dias * 24 * 60 * 60 * 1000);
+        }
+
+        const filtrados = adminClicksData.filter(item => {
+            const dt = new Date(item.timestamp);
+            const okData = !limiteData || (!isNaN(dt.getTime()) && dt >= limiteData);
+            const okEmp = empFiltro === 'todas' || item.empresa === empFiltro;
+            const okBtn = btnFiltro === 'todos' || item.botao === btnFiltro;
+            return okData && okEmp && okBtn;
+        });
+
+        const mapa = new Map();
+        filtrados.forEach(item => {
+            const chave = `${item.empresa || 'Sem nome'}|||${item.botao || 'desconhecido'}`;
+            mapa.set(chave, (mapa.get(chave) || 0) + 1);
+        });
+
+        const linhas = Array.from(mapa.entries())
+            .map(([chave, total]) => {
+                const [empresa, botao] = chave.split('|||');
+                return {
+                    empresa,
+                    botao,
+                    total,
+                    texto: `${empresa} - ${total} cliques - botão ${botao}`
+                };
+            })
+            .sort((a, b) => b.total - a.total || a.empresa.localeCompare(b.empresa));
+
+        currentReportText = linhas.map(l => l.texto).join('\n');
+
+        document.getElementById('adminTotalClicks').textContent = filtrados.length;
+        document.getElementById('adminTotalLines').textContent = linhas.length;
+
+        const listaEl = document.getElementById('listaRelatorioCliques');
+        if (!listaEl) return;
+
+        if (linhas.length === 0) {
+            listaEl.innerHTML = '<div class="status-message" style="padding: 16px;">Nenhum clique encontrado para esse filtro.</div>';
+            return;
+        }
+
+        listaEl.innerHTML = linhas.map(l => `
+            <div class="admin-report-line">
+                <span>${l.texto}</span>
+            </div>
+        `).join('');
+    }
+
+    function copiarRelatorioRaioX() {
+        if (!currentReportText) return;
+        navigator.clipboard.writeText(currentReportText).then(() => {
+            const fb = document.getElementById('adminCopyFeedback');
+            if (fb) {
+                fb.style.display = 'block';
+                setTimeout(() => { fb.style.display = 'none'; }, 3000);
+            }
+        });
+    }
+
+    // --- CONTROLE DOS OUTROS MODAIS ---
     function abrirModalReviews(nomeEmpresa) {
         const modal = document.getElementById('reviewsModal');
         const titleEl = document.getElementById('modalBusinessName');
@@ -1214,7 +1632,7 @@
                     <div class="stars-fill" style="width: ${percentage}%;">${starsHtml}</div>
                 </div>
                 <span class="rating-score">${score.toFixed(1)}</span>
-                <button class="rating-count-btn" onclick="abrirModalReviews('${businessName.replace(/'/g, "\\'")}')">(${total})</button>
+                <button class="rating-count-btn" onclick="abrirModalReviews('${escapeJsSingleQuote(businessName)}')">(${total})</button>
             </div>
         `;
     }
@@ -1324,6 +1742,43 @@
         document.getElementById('searchInput').addEventListener('input', () => renderBusinesses());
     }
 
+    function buildCardButtonsHtml(biz, origem) {
+        const cleanPhone = biz.Telefone ? String(biz.Telefone).replace(/\D/g, '') : '';
+        const whatsappUrl = `https://wa.me/${cleanPhone}`;
+        const instagramUrl = formatInstagramUrl(biz.Instagram);
+        const websiteUrl = formatWebsiteUrl(biz.Site);
+        const shareUrl = getShareWhatsappUrl(biz);
+
+        const safeId = escapeJsSingleQuote(biz.id || '');
+        const safeName = escapeJsSingleQuote(biz.Nome || '');
+        const safeOrigem = escapeJsSingleQuote(origem);
+
+        const btnWhatsapp = cleanPhone
+            ? `<a href="${whatsappUrl}" target="_blank" rel="noopener" class="btn btn-contact" onclick="handleCardClickById('${safeId}','${safeName}','whatsapp','${safeOrigem}')">Whats</a>`
+            : '';
+        const btnInstagram = instagramUrl
+            ? `<a href="${instagramUrl}" target="_blank" rel="noopener" class="btn btn-insta" onclick="handleCardClickById('${safeId}','${safeName}','insta','${safeOrigem}')">Insta</a>`
+            : '';
+        const btnSite = websiteUrl
+            ? `<a href="${websiteUrl}" target="_blank" rel="noopener" class="btn btn-site" onclick="handleCardClickById('${safeId}','${safeName}','site','${safeOrigem}')">Site</a>`
+            : '';
+
+        const btnIndicar = `<a href="${shareUrl}" target="_blank" rel="noopener" class="btn btn-share" onclick="handleCardClickById('${safeId}','${safeName}','indicar','${safeOrigem}')">📲 Indicar</a>`;
+        const btnAvaliar = `<a href="${GOOGLE_FORM_URL}" target="_blank" rel="noopener" class="btn btn-rate" onclick="handleCardClickById('${safeId}','${safeName}','avaliar','${safeOrigem}')">⭐ Avaliar</a>`;
+
+        const socialRow = (btnWhatsapp || btnInstagram || btnSite)
+            ? `<div class="social-actions">${btnWhatsapp}${btnInstagram}${btnSite}</div>`
+            : '';
+
+        return `
+            ${socialRow}
+            <div class="btn-row-secondary">
+                ${btnIndicar}
+                ${btnAvaliar}
+            </div>
+        `;
+    }
+
     function renderFeaturedCard() {
         const container = document.getElementById('featuredContainer');
         const content = document.getElementById('featuredContent');
@@ -1334,11 +1789,6 @@
         }
 
         const biz = randomFeaturedBusiness;
-        const cleanPhone = biz.Telefone ? String(biz.Telefone).replace(/\D/g, '') : '';
-        const whatsappUrl = `https://wa.me/${cleanPhone}`;
-        const instagramUrl = formatInstagramUrl(biz.Instagram);
-        const websiteUrl = formatWebsiteUrl(biz.Site);
-        const shareUrl = getShareWhatsappUrl(biz);
 
         const imgTag = biz.Imagem 
             ? `<img class="featured-img" src="${biz.Imagem}" alt="${biz.Nome}">` 
@@ -1348,17 +1798,8 @@
             ? `<span class="tag-building">DO PRÉDIO</span>` 
             : '';
 
-        const btnWhatsapp = cleanPhone ? `<a href="${whatsappUrl}" target="_blank" rel="noopener" class="btn btn-contact">Whats</a>` : '';
-        const btnInstagram = instagramUrl ? `<a href="${instagramUrl}" target="_blank" rel="noopener" class="btn btn-insta">Insta</a>` : '';
-        const btnSite = websiteUrl ? `<a href="${websiteUrl}" target="_blank" rel="noopener" class="btn btn-site">Site</a>` : '';
-
         const ratingHtml = renderRatingHtml(biz.MediaAvaliacoes, biz.TotalAvaliacoes, biz.Nome);
-        const btnIndicar = `<a href="${shareUrl}" target="_blank" rel="noopener" class="btn btn-share">📲 Indicar</a>`;
-        const btnAvaliar = `<a href="${GOOGLE_FORM_URL}" target="_blank" rel="noopener" class="btn btn-rate">⭐ Avaliar</a>`;
-
-        const socialRow = (btnWhatsapp || btnInstagram || btnSite) 
-            ? `<div class="social-actions">${btnWhatsapp}${btnInstagram}${btnSite}</div>` 
-            : '';
+        const buttonsHtml = buildCardButtonsHtml(biz, 'destaque');
 
         content.innerHTML = `
             ${imgTag}
@@ -1377,11 +1818,7 @@
                     </div>
                 </div>
                 <div style="display: flex; flex-direction: column; gap: 6px; margin-top: 8px;">
-                    ${socialRow}
-                    <div class="btn-row-secondary">
-                        ${btnIndicar}
-                        ${btnAvaliar}
-                    </div>
+                    ${buttonsHtml}
                 </div>
             </div>
         `;
@@ -1420,12 +1857,6 @@
         }
 
         filtered.forEach(biz => {
-            const cleanPhone = biz.Telefone ? String(biz.Telefone).replace(/\D/g, '') : '';
-            const whatsappUrl = `https://wa.me/${cleanPhone}`;
-            const instagramUrl = formatInstagramUrl(biz.Instagram);
-            const websiteUrl = formatWebsiteUrl(biz.Site);
-            const shareUrl = getShareWhatsappUrl(biz);
-            
             const imgTag = biz.Imagem 
                 ? `<img class="card-img" src="${biz.Imagem}" alt="${biz.Nome}" loading="lazy">` 
                 : `<div class="card-img" style="display:flex;align-items:center;justify-content:center;color:#94a3b8;font-size:0.75rem;background:#e2e8f0;">Sem foto</div>`;
@@ -1434,17 +1865,8 @@
                 ? `<span class="tag-building">DO PRÉDIO</span>` 
                 : '';
 
-            const btnWhatsapp = cleanPhone ? `<a href="${whatsappUrl}" target="_blank" rel="noopener" class="btn btn-contact">Whats</a>` : '';
-            const btnInstagram = instagramUrl ? `<a href="${instagramUrl}" target="_blank" rel="noopener" class="btn btn-insta">Insta</a>` : '';
-            const btnSite = websiteUrl ? `<a href="${websiteUrl}" target="_blank" rel="noopener" class="btn btn-site">Site</a>` : '';
-            
             const ratingHtml = renderRatingHtml(biz.MediaAvaliacoes, biz.TotalAvaliacoes, biz.Nome);
-            const btnIndicar = `<a href="${shareUrl}" target="_blank" rel="noopener" class="btn btn-share">📲 Indicar</a>`;
-            const btnAvaliar = `<a href="${GOOGLE_FORM_URL}" target="_blank" rel="noopener" class="btn btn-rate">⭐ Avaliar</a>`;
-
-            const socialRow = (btnWhatsapp || btnInstagram || btnSite) 
-                ? `<div class="social-actions">${btnWhatsapp}${btnInstagram}${btnSite}</div>` 
-                : '';
+            const buttonsHtml = buildCardButtonsHtml(biz, 'catalogo');
 
             const card = document.createElement('div');
             card.className = 'card';
@@ -1464,11 +1886,7 @@
                     </div>
                 </div>
                 <div class="card-actions">
-                    ${socialRow}
-                    <div class="btn-row-secondary">
-                        ${btnIndicar}
-                        ${btnAvaliar}
-                    </div>
+                    ${buttonsHtml}
                 </div>
             `;
             container.appendChild(card);
