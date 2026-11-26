@@ -207,12 +207,13 @@
             left: 0;
             width: 100vw;
             height: 100vh;
-            background: rgba(0, 0, 0, 0.55);
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(2px);
             display: flex;
             justify-content: center;
             align-items: center;
             z-index: 10000;
-            padding: 16px;
+            padding: 14px;
             opacity: 0;
             pointer-events: none;
             transition: opacity 0.2s ease;
@@ -227,17 +228,17 @@
             background: var(--card-bg);
             width: 100%;
             max-width: 440px;
-            border-radius: 14px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            border-radius: 16px;
+            box-shadow: 0 20px 35px -10px rgba(15, 23, 42, 0.28);
             display: flex;
             flex-direction: column;
-            max-height: 85vh;
+            max-height: 88vh;
             overflow: hidden;
             animation: modalScale 0.2s ease;
         }
 
         .modal-content.modal-lg {
-            max-width: 560px;
+            max-width: 580px;
         }
 
         @keyframes modalScale {
@@ -246,38 +247,49 @@
         }
 
         .modal-header {
-            padding: 14px 16px;
+            padding: 14px 18px;
             border-bottom: 1px solid #e2e8f0;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background: #f8fafc;
+            background: linear-gradient(135deg, #f8fafc 0%, #eff6ff 100%);
         }
 
         .modal-title {
-            font-size: 0.95rem;
-            font-weight: 700;
-            color: var(--text);
+            font-size: 0.98rem;
+            font-weight: 800;
+            color: #0f172a;
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 8px;
         }
 
         .modal-close {
-            background: none;
-            border: none;
-            font-size: 1.15rem;
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            width: 30px;
+            height: 30px;
+            font-size: 1rem;
             color: var(--text-light);
             cursor: pointer;
-            padding: 4px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.15s;
+        }
+
+        .modal-close:hover {
+            color: #0f172a;
+            background: #f1f5f9;
         }
 
         .modal-body {
-            padding: 16px;
+            padding: 16px 18px;
             overflow-y: auto;
             display: flex;
             flex-direction: column;
-            gap: 12px;
+            gap: 14px;
         }
 
         .review-item {
@@ -313,7 +325,7 @@
             margin-top: 2px;
         }
 
-        /* --- ESTILOS DO MODAL RAIO-X ADMIN --- */
+        /* --- ESTILOS REFINADOS DO MODAL RAIO-X ADMIN --- */
         .admin-auth-box {
             display: flex;
             flex-direction: column;
@@ -323,8 +335,8 @@
         .admin-input {
             width: 100%;
             border: 1px solid #cbd5e1;
-            border-radius: 8px;
-            padding: 9px 12px;
+            border-radius: 10px;
+            padding: 10px 12px;
             font-size: 0.85rem;
             color: var(--text);
             outline: none;
@@ -332,44 +344,20 @@
 
         .admin-input:focus {
             border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
         }
 
-        .btn-admin-primary {
-            background-color: var(--primary);
-            color: #ffffff;
-            border: none;
-            border-radius: 8px;
-            padding: 9px 14px;
-            font-size: 0.82rem;
-            font-weight: 700;
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 6px;
+        .admin-panel {
+            display: none;
+            flex-direction: column;
+            gap: 14px;
         }
 
-        .btn-admin-primary:hover {
-            background-color: var(--primary-hover);
-        }
-
-        .btn-admin-secondary {
-            background-color: #f1f5f9;
-            color: var(--text);
-            border: 1px solid #cbd5e1;
-            border-radius: 8px;
-            padding: 7px 12px;
-            font-size: 0.78rem;
-            font-weight: 600;
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 6px;
-        }
-
-        .btn-admin-secondary:hover {
-            background-color: #e2e8f0;
+        .admin-filters-card {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 10px;
         }
 
         .admin-filters-grid {
@@ -378,50 +366,231 @@
             gap: 8px;
         }
 
-        @media (min-width: 520px) {
+        @media (min-width: 540px) {
             .admin-filters-grid {
-                grid-template-columns: 1.4fr 1fr 1fr;
+                grid-template-columns: 1.45fr 1fr 1fr;
             }
         }
 
         .admin-summary-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 8px;
+            gap: 10px;
         }
 
         .admin-stat-card {
-            background: #eff6ff;
-            border: 1px solid #bfdbfe;
-            border-radius: 8px;
-            padding: 8px 10px;
+            background: #ffffff;
+            border: 1px solid #dbeafe;
+            border-radius: 12px;
+            padding: 11px 13px;
+            box-shadow: 0 1px 3px rgba(37, 99, 235, 0.05);
         }
 
         .admin-stat-label {
             font-size: 0.68rem;
-            color: var(--text-light);
+            color: #64748b;
             text-transform: uppercase;
+            letter-spacing: 0.5px;
             font-weight: 700;
         }
 
         .admin-stat-value {
-            font-size: 1rem;
+            font-size: 1.25rem;
             font-weight: 800;
-            color: var(--primary);
+            color: #1d4ed8;
             margin-top: 2px;
         }
 
-        .admin-report-line {
-            background: #f8fafc;
-            border: 1px solid #e2e8f0;
+        .admin-stat-sub {
+            font-size: 0.72rem;
+            color: #475569;
+            margin-top: 2px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .admin-toolbar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .admin-toolbar-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .btn-admin-primary {
+            background-color: var(--primary);
+            color: #ffffff;
+            border: none;
+            border-radius: 9px;
+            padding: 8px 13px;
+            font-size: 0.78rem;
+            font-weight: 700;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            transition: background-color 0.15s;
+        }
+
+        .btn-admin-primary:hover {
+            background-color: var(--primary-hover);
+        }
+
+        .btn-admin-whatsapp {
+            background-color: #16a34a;
+            color: #ffffff;
+            border: none;
+            border-radius: 9px;
+            padding: 8px 13px;
+            font-size: 0.78rem;
+            font-weight: 700;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            transition: background-color 0.15s;
+        }
+
+        .btn-admin-whatsapp:hover {
+            background-color: #15803d;
+        }
+
+        .btn-admin-secondary {
+            background-color: #ffffff;
+            color: #334155;
+            border: 1px solid #cbd5e1;
+            border-radius: 9px;
+            padding: 8px 12px;
+            font-size: 0.78rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            transition: all 0.15s;
+        }
+
+        .btn-admin-secondary:hover {
+            background-color: #f1f5f9;
+            border-color: #94a3b8;
+        }
+
+        .admin-feedback {
+            font-size: 0.75rem;
+            color: #15803d;
+            background: #f0fdf4;
+            border: 1px solid #bbf7d0;
             border-radius: 8px;
-            padding: 8px 10px;
-            font-size: 0.8rem;
-            color: var(--text);
+            padding: 7px 10px;
+            font-weight: 600;
+            display: none;
+        }
+
+        .admin-metric-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .admin-metric-card {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 11px;
+            padding: 10px 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .admin-metric-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .admin-metric-title {
+            font-size: 0.82rem;
+            font-weight: 700;
+            color: #0f172a;
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            min-width: 0;
+        }
+
+        .admin-metric-title span {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .admin-metric-badge {
+            background: #eff6ff;
+            color: #1d4ed8;
+            border: 1px solid #bfdbfe;
+            font-size: 0.72rem;
+            font-weight: 800;
+            padding: 3px 9px;
+            border-radius: 999px;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        .admin-progress-track {
+            width: 100%;
+            height: 6px;
+            background: #f1f5f9;
+            border-radius: 999px;
+            overflow: hidden;
+        }
+
+        .admin-progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #2563eb 0%, #3b82f6 100%);
+            border-radius: 999px;
+            transition: width 0.25s ease;
+        }
+
+        .owner-preview-box {
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+            border: 1px solid #cbd5e1;
+            border-radius: 12px;
+            padding: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .owner-preview-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             gap: 8px;
+            font-size: 0.74rem;
+            font-weight: 700;
+            color: #334155;
+        }
+
+        .owner-preview-text {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 9px;
+            padding: 10px 12px;
+            font-size: 0.78rem;
+            line-height: 1.45;
+            color: #1e293b;
+            white-space: pre-line;
         }
 
         .admin-error-msg {
@@ -1068,14 +1237,14 @@
     <div id="adminModal" class="modal-overlay" onclick="fecharModalAdmin(event)">
         <div class="modal-content modal-lg" onclick="event.stopPropagation()">
             <div class="modal-header">
-                <div class="modal-title">📊 Raio-X de Cliques (Admin)</div>
+                <div class="modal-title">📊 Raio-X de Cliques</div>
                 <button class="modal-close" onclick="fecharModalAdminDirect()"><i class="fa-solid fa-xmark"></i></button>
             </div>
             <div class="modal-body">
                 <!-- Etapa 1: Senha -->
                 <div id="adminAuthBox" class="admin-auth-box">
-                    <p style="font-size: 0.8rem; color: var(--text-light);">
-                        Digite a senha de administrador para consultar o relatório de cliques nos botões.
+                    <p style="font-size: 0.82rem; color: var(--text-light);">
+                        Digite a senha de administrador para consultar o desempenho dos botões e gerar relatórios para os parceiros.
                     </p>
                     <input type="password" id="adminPasswordInput" class="admin-input" placeholder="Senha do administrador" onkeydown="if(event.key==='Enter') autenticarRaioX()">
                     <button type="button" id="btnAdminLogin" class="btn-admin-primary" onclick="autenticarRaioX()">
@@ -1085,51 +1254,68 @@
                 </div>
 
                 <!-- Etapa 2: Painel de Filtros e Relatório -->
-                <div id="adminPanelBox" style="display: none; flex-direction: column; gap: 12px;">
-                    <div class="admin-filters-grid">
-                        <select id="filtroEmpresa" class="filter-select" onchange="renderizarRelatorioRaioX()">
-                            <option value="todas">Todas as empresas</option>
-                        </select>
-                        <select id="filtroBotao" class="filter-select" onchange="renderizarRelatorioRaioX()">
-                            <option value="todos">Todos os botões</option>
-                            <option value="whatsapp">Whats</option>
-                            <option value="insta">Insta</option>
-                            <option value="site">Site</option>
-                            <option value="indicar">Indicar</option>
-                            <option value="avaliar">Avaliar</option>
-                        </select>
-                        <select id="filtroPeriodo" class="filter-select" onchange="renderizarRelatorioRaioX()">
-                            <option value="30">Últimos 30 dias</option>
-                            <option value="7">Últimos 7 dias</option>
-                            <option value="1">Hoje</option>
-                            <option value="tudo">Todo o período</option>
-                        </select>
+                <div id="adminPanelBox" class="admin-panel">
+                    <div class="admin-filters-card">
+                        <div class="admin-filters-grid">
+                            <select id="filtroEmpresa" class="filter-select" onchange="renderizarRelatorioRaioX()">
+                                <option value="todas">Todas as empresas</option>
+                            </select>
+                            <select id="filtroBotao" class="filter-select" onchange="renderizarRelatorioRaioX()">
+                                <option value="todos">Todos os botões</option>
+                                <option value="whatsapp">Whats</option>
+                                <option value="insta">Insta</option>
+                                <option value="site">Site</option>
+                                <option value="indicar">Indicar</option>
+                                <option value="avaliar">Avaliar</option>
+                            </select>
+                            <select id="filtroPeriodo" class="filter-select" onchange="renderizarRelatorioRaioX()">
+                                <option value="30">Últimos 30 dias</option>
+                                <option value="7">Últimos 7 dias</option>
+                                <option value="1">Hoje</option>
+                                <option value="tudo">Todo o período</option>
+                            </select>
+                        </div>
                     </div>
 
                     <div class="admin-summary-grid">
                         <div class="admin-stat-card">
                             <div class="admin-stat-label">Cliques no filtro</div>
                             <div class="admin-stat-value" id="adminTotalClicks">0</div>
+                            <div class="admin-stat-sub" id="adminPeriodLabel">Últimos 30 dias</div>
                         </div>
                         <div class="admin-stat-card">
-                            <div class="admin-stat-label">Linhas no relatório</div>
-                            <div class="admin-stat-value" id="adminTotalLines">0</div>
+                            <div class="admin-stat-label">Botão destaque</div>
+                            <div class="admin-stat-value" id="adminTopButton">—</div>
+                            <div class="admin-stat-sub" id="adminTopButtonSub">Sem dados</div>
                         </div>
                     </div>
 
-                    <div style="display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap;">
+                    <div class="admin-toolbar">
                         <button type="button" class="btn-admin-secondary" onclick="carregarDadosRaioX(adminPasswordCache)">
                             <i class="fa-solid fa-rotate"></i> Atualizar
                         </button>
-                        <button type="button" class="btn-admin-secondary" onclick="copiarRelatorioRaioX()">
-                            <i class="fa-regular fa-copy"></i> Copiar relatório
-                        </button>
-                    </div>
-                    <div id="adminCopyFeedback" style="font-size: 0.72rem; color: var(--success); font-weight: 600; display: none;">
-                        Relatório copiado para a área de transferência!
+                        <div class="admin-toolbar-group">
+                            <button type="button" class="btn-admin-secondary" onclick="copiarRelatorioSimples()">
+                                <i class="fa-regular fa-copy"></i> Copiar linhas
+                            </button>
+                            <button type="button" class="btn-admin-whatsapp" onclick="copiarRelatorioParceiro()">
+                                <i class="fa-brands fa-whatsapp"></i> Copiar para o dono
+                            </button>
+                        </div>
                     </div>
 
-                    <div id="listaRelatorioCliques" style="display: flex; flex-direction: column; gap: 6px;"></div>
+                    <div id="adminFeedback" class="admin-feedback"></div>
+
+                    <!-- Cards visuais com barra proporcional -->
+                    <div id="listaMetricasVisual" class="admin-metric-list"></div>
+
+                    <!-- Prévia formatada pronta para enviar ao dono da empresa -->
+                    <div id="ownerPreviewBox" class="owner-preview-box" style="display: none;">
+                        <div class="owner-preview-header">
+                            <span><i class="fa-solid fa-paper-plane" style="color: #16a34a;"></i> Mensagem pronta para o dono da empresa</span>
+                        </div>
+                        <div id="ownerPreviewText" class="owner-preview-text"></div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -1277,7 +1463,7 @@
     const REVIEWS_SHEET_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?sheet=Avaliacoes&tqx=out:json`;
 
     // Cole aqui a URL do seu Aplicativo da Web do Google Apps Script
-    const TRACKER_URL = 'https://script.google.com/macros/s/AKfycbxQymy9p164zRXSejyK0n1q7RIOV7qcdD9kL9C4xK7rhGQJZaF6HrBK-ydsczinL1SXcA/exec';
+    const TRACKER_URL = 'https://script.google.com/macros/s/AKfycbz-n6o-yXWvGoxY5K08X2O6h1yE6o3m4t5u6v7w8x9y0z1a2b3c4d5e6f7g8h9i0j/exec';
 
     const GOOGLE_FORM_URL = 'https://forms.gle/reSPVKvJZi4mK2Yk9';
 
@@ -1294,10 +1480,23 @@
     // Estado do Raio-X Admin
     let adminClicksData = [];
     let adminPasswordCache = '';
-    let currentReportText = '';
+    let simpleReportText = '';
+    let ownerReportText = '';
+
+    const BUTTON_META = {
+        whatsapp: { label: 'WhatsApp', short: 'whatsapp', icon: 'fa-brands fa-whatsapp', color: '#16a34a' },
+        insta: { label: 'Instagram', short: 'insta', icon: 'fa-brands fa-instagram', color: '#e1306c' },
+        site: { label: 'Site', short: 'site', icon: 'fa-solid fa-globe', color: '#4f46e5' },
+        indicar: { label: 'Indicar', short: 'indicar', icon: 'fa-solid fa-share-nodes', color: '#059669' },
+        avaliar: { label: 'Avaliar', short: 'avaliar', icon: 'fa-solid fa-star', color: '#f59e0b' }
+    };
 
     async function init() {
         await Promise.all([fetchBusinesses(), fetchReviews()]);
+    }
+
+    function formatClickWord(count) {
+        return count === 1 ? 'clique' : 'cliques';
     }
 
     function registrarClique(biz, botao, origem = 'catalogo') {
@@ -1412,6 +1611,14 @@
         if (event.target.id === 'adminModal') fecharModalAdminDirect();
     }
 
+    function showAdminFeedback(msg) {
+        const fb = document.getElementById('adminFeedback');
+        if (!fb) return;
+        fb.textContent = msg;
+        fb.style.display = 'block';
+        setTimeout(() => { fb.style.display = 'none'; }, 3000);
+    }
+
     async function autenticarRaioX() {
         const input = document.getElementById('adminPasswordInput');
         const errEl = document.getElementById('adminAuthError');
@@ -1477,10 +1684,40 @@
         }
     }
 
+    function buildOwnerReportMessage({ empresa, periodoTexto, totalCliques, linhas }) {
+        const dataHoje = new Date().toLocaleDateString('pt-BR');
+        const tituloEmpresa = empresa === 'todas' ? 'Visão Geral do Catálogo' : empresa;
+
+        const topLinha = linhas[0];
+        const destaqueTexto = topLinha
+            ? `\n🌟 *Canal com mais engajamento:* ${BUTTON_META[topLinha.botao]?.label || topLinha.botao} (${topLinha.total} ${formatClickWord(topLinha.total)})`
+            : '';
+
+        const itensFormatados = linhas.map(l => {
+            const meta = BUTTON_META[l.botao] || { label: l.botao };
+            const pct = totalCliques > 0 ? Math.round((l.total / totalCliques) * 100) : 0;
+            return `• *${meta.label}:* ${l.total} ${formatClickWord(l.total)} (${pct}%)`;
+        }).join('\n');
+
+        return [
+            `📊 *Raio-X de Desempenho — BPL Negócios Locais*`,
+            `🏢 *Empresa:* ${tituloEmpresa}`,
+            `🗓️ *Período:* ${periodoTexto} (atualizado em ${dataHoje})`,
+            `👆 *Total de interações:* *${totalCliques} ${formatClickWord(totalCliques)}*`,
+            ``,
+            itensFormatados,
+            destaqueTexto,
+            ``,
+            `Seguimos divulgando seu negócio para a comunidade! 🚀`
+        ].filter(Boolean).join('\n');
+    }
+
     function renderizarRelatorioRaioX() {
         const empFiltro = document.getElementById('filtroEmpresa')?.value || 'todas';
         const btnFiltro = document.getElementById('filtroBotao')?.value || 'todos';
-        const periodoFiltro = document.getElementById('filtroPeriodo')?.value || '30';
+        const periodoSelect = document.getElementById('filtroPeriodo');
+        const periodoFiltro = periodoSelect?.value || '30';
+        const periodoTexto = periodoSelect?.options[periodoSelect.selectedIndex]?.text || 'Últimos 30 dias';
 
         const agora = new Date();
         let limiteData = null;
@@ -1509,44 +1746,92 @@
         const linhas = Array.from(mapa.entries())
             .map(([chave, total]) => {
                 const [empresa, botao] = chave.split('|||');
+                const meta = BUTTON_META[botao] || { label: botao, short: botao, icon: 'fa-solid fa-mouse-pointer', color: '#2563eb' };
                 return {
                     empresa,
                     botao,
+                    meta,
                     total,
-                    texto: `${empresa} - ${total} cliques - botão ${botao}`
+                    linhaSimples: `${empresa} - ${total} ${formatClickWord(total)} - botão ${meta.short}`
                 };
             })
             .sort((a, b) => b.total - a.total || a.empresa.localeCompare(b.empresa));
 
-        currentReportText = linhas.map(l => l.texto).join('\n');
+        const totalCliques = filtrados.length;
+        simpleReportText = linhas.map(l => l.linhaSimples).join('\n');
+        ownerReportText = buildOwnerReportMessage({
+            empresa: empFiltro,
+            periodoTexto,
+            totalCliques,
+            linhas
+        });
 
-        document.getElementById('adminTotalClicks').textContent = filtrados.length;
-        document.getElementById('adminTotalLines').textContent = linhas.length;
+        document.getElementById('adminTotalClicks').textContent = totalCliques;
+        document.getElementById('adminPeriodLabel').textContent = periodoTexto;
 
-        const listaEl = document.getElementById('listaRelatorioCliques');
+        const topItem = linhas[0];
+        const topBtnEl = document.getElementById('adminTopButton');
+        const topBtnSubEl = document.getElementById('adminTopButtonSub');
+        if (topItem) {
+            topBtnEl.textContent = topItem.meta.label;
+            topBtnSubEl.textContent = `${topItem.total} ${formatClickWord(topItem.total)} • ${topItem.empresa}`;
+        } else {
+            topBtnEl.textContent = '—';
+            topBtnSubEl.textContent = 'Sem interações no filtro';
+        }
+
+        const listaEl = document.getElementById('listaMetricasVisual');
+        const previewBox = document.getElementById('ownerPreviewBox');
+        const previewText = document.getElementById('ownerPreviewText');
+
         if (!listaEl) return;
 
         if (linhas.length === 0) {
-            listaEl.innerHTML = '<div class="status-message" style="padding: 16px;">Nenhum clique encontrado para esse filtro.</div>';
+            listaEl.innerHTML = '<div class="status-message" style="padding: 18px;">Nenhum clique registrado para esse filtro.</div>';
+            if (previewBox) previewBox.style.display = 'none';
             return;
         }
 
-        listaEl.innerHTML = linhas.map(l => `
-            <div class="admin-report-line">
-                <span>${l.texto}</span>
-            </div>
-        `).join('');
+        const maxTotal = Math.max(...linhas.map(l => l.total), 1);
+
+        listaEl.innerHTML = linhas.map(l => {
+            const pctLargura = Math.max(8, Math.round((l.total / maxTotal) * 100));
+            const labelEmpresa = empFiltro === 'todas' ? `<strong>${l.empresa}</strong> • ` : '';
+            return `
+                <div class="admin-metric-card">
+                    <div class="admin-metric-top">
+                        <div class="admin-metric-title">
+                            <i class="${l.meta.icon}" style="color: ${l.meta.color}; font-size: 0.9rem;"></i>
+                            <span>${labelEmpresa}Botão ${l.meta.label}</span>
+                        </div>
+                        <span class="admin-metric-badge">${l.total} ${formatClickWord(l.total)}</span>
+                    </div>
+                    <div class="admin-progress-track">
+                        <div class="admin-progress-fill" style="width: ${pctLargura}%; background: ${l.meta.color};"></div>
+                    </div>
+                </div>
+            `;
+        }).join('');
+
+        if (previewBox && previewText) {
+            previewBox.style.display = 'flex';
+            previewText.textContent = ownerReportText;
+        }
     }
 
-    function copiarRelatorioRaioX() {
-        if (!currentReportText) return;
-        navigator.clipboard.writeText(currentReportText).then(() => {
-            const fb = document.getElementById('adminCopyFeedback');
-            if (fb) {
-                fb.style.display = 'block';
-                setTimeout(() => { fb.style.display = 'none'; }, 3000);
-            }
+    function copiarTextoSeguro(texto, mensagemSucesso) {
+        if (!texto) return;
+        navigator.clipboard.writeText(texto).then(() => {
+            showAdminFeedback(mensagemSucesso);
         });
+    }
+
+    function copiarRelatorioSimples() {
+        copiarTextoSeguro(simpleReportText, 'Linhas simples copiadas para a área de transferência!');
+    }
+
+    function copiarRelatorioParceiro() {
+        copiarTextoSeguro(ownerReportText, 'Relatório formatado para envio ao dono copiado!');
     }
 
     // --- CONTROLE DOS OUTROS MODAIS ---
